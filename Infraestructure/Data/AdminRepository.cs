@@ -10,24 +10,5 @@ namespace Infraestructure.Data
         {
             _context = context;
         }
-
-        public List<string> GetDistricts()
-        {
-            var districts = _context.Admins.ToList();
-
-            return districts.District;
-        }
-        public void AddDistrict(string district)
-        {
-
-        }
-        public List<string> GetSchools()
-        {
-
-        }
-        public void AddSchool(string school)
-        {
-
-        }
     }
 }

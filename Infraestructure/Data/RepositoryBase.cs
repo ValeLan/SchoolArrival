@@ -18,14 +18,13 @@ namespace Infraestructure.Data
             return _context.Set<T>().ToList();
         }
 
-        public T Add(T entity) 
+        public void Add(T entity) 
         {
             _context.Set<T>().Add(entity);
             _context.SaveChanges();
-            return entity;
         }
 
-        public void Remove<TId>(TId id)
+        public void Remove(int id)
         {
             var entity = _context.Set<T>().Find(id);
             if (entity != null)

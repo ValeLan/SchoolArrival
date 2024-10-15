@@ -14,5 +14,6 @@ namespace Domain.Entities
         public string? StudentAdress {  get; set; }
         public string? District {  get; set; }
         public DateTime Hour {  get; set; }
+        public List<Travel> Travels { get; set; }
     }
 }

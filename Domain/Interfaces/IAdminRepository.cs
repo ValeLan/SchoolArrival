@@ -9,9 +9,13 @@ namespace Domain.Interfaces
 {
     public interface IAdminRepository : IRepositoryBase<Admin>
     {
-        List<string> GetDistricts();
+        List<District> GetDistricts();
         void AddDistrict(string district);
-        List<string> GetSchools();
+
+        void RemoveDistrict(string name);
+
+        List<School> GetSchools();
         void AddSchool(string school);
+        void RemoveSchool(string school);
     }
 }

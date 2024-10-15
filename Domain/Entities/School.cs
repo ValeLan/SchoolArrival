@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Driver : User
+    public class School
     {
-        public List<Travel> Travels { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }
