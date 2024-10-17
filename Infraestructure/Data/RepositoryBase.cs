@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 
 namespace Infraestructure.Data
 {
-    public class RepositoryBase<T> where T : class
+    public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
         public TravelArrivalDbContext _context;
 
@@ -18,6 +18,8 @@ namespace Infraestructure.Data
             return _context.Set<T>().ToList();
         }
 
+        
+        //Preguntar por el metodo para modificar
         public void Add(T entity) 
         {
             _context.Set<T>().Add(entity);
@@ -33,5 +35,6 @@ namespace Infraestructure.Data
                 _context.SaveChanges();
             }
         }
+
     }
 }

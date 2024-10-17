@@ -1,4 +1,6 @@
-﻿using Domain.Entities;
+﻿using Application.Interfaces;
+using Application.Models.Requests;
+using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +15,38 @@ namespace SchoolArrival.Controllers
         {
             _AdminServices = adminServices;
         }
-        [HttpGet("{name}")]
-        public IActionResult Get([FromRoute]string name)
+
+        [HttpGet]
+        public IActionResult GetAll() 
         {
-            return Ok(_AdminServices.Get(name));
+            return Ok(_AdminServices.GetAll());
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get([FromRoute]int id)
+        {
+            return Ok(_AdminServices.GetById(id));
+        }
+
+        [HttpPost]
+        public IActionResult CreateAdmin(AdminSaveRequest request) 
+        { 
+            _AdminServices.CreateAdmin(request);
+            return Ok();
+        }
+
+        [HttpPut]
+        public IActionResult UpdateAdmin([FromQuery] int id, AdminSaveRequest request) 
+        { 
+            _AdminServices.UpdateAdmin(id, request);
+            return Ok();
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteAdmin(int id) 
+        {
+            _AdminServices.DeleteAdmin(id);
+            return Ok();
         }
     }
 }

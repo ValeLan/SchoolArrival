@@ -1,14 +1,30 @@
-﻿using Domain.Entities;
+﻿using Application.Interfaces;
+using Application.Models.Requests;
+using Domain.Entities;
+using Domain.Interfaces;
 using System.Linq;
 
 namespace Infraestructure.Data
 {
-    public class AdminRepository : RepositoryBase<Admin>
+    public class AdminRepository : RepositoryBase<Admin>, IAdminRepository
     {
-        private readonly TravelArrivalDbContext _context;
-        public AdminRepository(TravelArrivalDbContext context) : base(context)
+        public AdminRepository(TravelArrivalDbContext context) : base(context) { }
+
+        public Admin? GetById(int id)
         {
-            _context = context;
+            return _context.Admins.FirstOrDefault(e => e.Id == id);
+        }
+
+        public void UpdateEntity(int id, AdminSaveRequest entity)
+        {
+            var adminToUpdate = _context.Admins.FirstOrDefault(e => e.Id == id);
+
+            if (adminToUpdate != null)
+            {
+                adminToUpdate.Name = entity.Name;
+                adminToUpdate.Password = entity.Password;
+                _context.SaveChanges();
+            }
         }
     }
 }

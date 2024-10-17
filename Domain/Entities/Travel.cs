@@ -15,9 +15,9 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public TravelState State {  get; set; }
-        public string? StudentAdress { get; set; }
-        public Driver Driver { get; set; }
-        public List<Passenger> Passengers {  get; set; }
+        public string StudentAdress { get; set; } = string.Empty;
+        public Driver? Driver { get; set; } 
+        public List<Passenger>? Passengers {  get; set; }
 
     }
 }

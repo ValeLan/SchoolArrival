@@ -16,6 +16,14 @@ namespace Infraestructure.Data
         {
 
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlite("Data Source=SchoolArrival.db", b => b.MigrationsAssembly("Infraestructure"));
+            }
+        }
     }
 
 }

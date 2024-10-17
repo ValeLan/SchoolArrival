@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Infraestructure.Data
 {
-    internal class SchoolRepository : RepositoryBase<School>
+    internal class SchoolRepository : RepositoryBase<School>, ISchoolRepository
     {
-        private readonly TravelArrivalDbContext _context;
-        public SchoolRepository(TravelArrivalDbContext context) : base(context)
-        {
-            _context = context;
-        }
+        public SchoolRepository(TravelArrivalDbContext context) : base(context) { }
 
+        public School? GetById(int id)
+        {
+            return _context.Schools.FirstOrDefault(e => e.Id == id);
+        }
     }
 }

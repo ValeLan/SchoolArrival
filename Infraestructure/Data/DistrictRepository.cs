@@ -1,4 +1,6 @@
-﻿using Domain.Entities;
+﻿using Application.Models.Requests;
+using Domain.Entities;
+using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +9,24 @@ using System.Threading.Tasks;
 
 namespace Infraestructure.Data
 {
-    public class DistrictRepository : RepositoryBase<District>
+    public class DistrictRepository : RepositoryBase<District>, IDistrictRepository
     {
-        private readonly TravelArrivalDbContext _context;
-        public DistrictRepository(TravelArrivalDbContext context) : base(context)
+        public DistrictRepository(TravelArrivalDbContext context) : base(context) { }
+
+        public District? GetById(int id)
         {
-            _context = context;
+            return _context.Districts.FirstOrDefault(e => e.Id == id);
         }
 
+        public void UpdateEntity(int id, District entity)
+        {
+            var DistrictToUpdate = _context.Districts.FirstOrDefault(e => e.Id == id);
+
+            if (DistrictToUpdate != null)
+            {
+                DistrictToUpdate.Name = entity.Name;
+                _context.SaveChanges();
+            }
+        }
     }
 }
