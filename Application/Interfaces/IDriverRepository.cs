@@ -2,7 +2,6 @@
 using Application.Models.Requests;
 using Domain.Entities;
 using Domain.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +10,10 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IAdminRepository : IRepositoryBase<Admin>
+    public interface IDriverRepository : IRepositoryBase<Driver>
     {
-        List<AdminDto> GetAll();
-        Admin? GetById(int id);
-
-        void UpdateEntity(int id, AdminSaveRequest entity);
-
-
+        List<DriverDto> GetAll();
+        Driver? GetById(int id);
+        void UpdateEntity(int id, DriverSaveRequest entity);
     }
-
 }

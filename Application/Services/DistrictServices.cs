@@ -34,13 +34,8 @@ namespace Application.Services
 
         public District CreateDistrict(District newDistrict)
         {
-            var entity = new District
-            {
-                Name = newDistrict.Name,
-            };
-
-            _districtRepository.Add(entity);
-            return entity;
+            _districtRepository.Add(newDistrict);
+            return newDistrict;
         }
 
         public void UpdateDistrict(int id, District newDistrict)

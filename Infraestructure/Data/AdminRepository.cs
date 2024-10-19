@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Models.Dtos;
 using Application.Models.Requests;
 using Domain.Entities;
 using Domain.Interfaces;
@@ -10,6 +11,12 @@ namespace Infraestructure.Data
     {
         public AdminRepository(TravelArrivalDbContext context) : base(context) { }
 
+        public List<AdminDto> GetAll()
+        {
+            var dto = _context.Admins.ToList();
+
+            return AdminDto.ToDto(dto);
+        }
         public Admin? GetById(int id)
         {
             return _context.Admins.FirstOrDefault(e => e.Id == id);

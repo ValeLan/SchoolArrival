@@ -21,16 +21,20 @@ namespace Application.Services
             _adminRepository = adminRepository;
         }
 
-        public List<Admin> GetAll()
+        public List<AdminDto> GetAll()
         {
-            return _adminRepository.Get();
+            return _adminRepository.GetAll();
         }
 
-        public Admin? GetById(int id) 
+        public AdminDto? GetById(int id) 
         {
-            var admin = _adminRepository.Get();
+            var admin = _adminRepository.Get().FirstOrDefault(a => a.Id == id);
+            if (admin == null)
+            {
+                return null;
+            }
 
-            return admin.FirstOrDefault (a => a.Id == id);
+            return AdminDto.ToDto(admin);
         }
 
         public AdminDto CreateAdmin(AdminSaveRequest adminDto) 

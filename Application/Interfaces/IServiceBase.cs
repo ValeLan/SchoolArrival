@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IAdminServices
+    public interface IServiceBase<T> where T : class
     {
-        List<AdminDto> GetAll();
-        AdminDto? GetById(int id);
+        List<T> GetAll();
+        T? GetById(int id);
         AdminDto CreateAdmin(AdminSaveRequest adminDto);
         void UpdateAdmin(int id, AdminSaveRequest adminDto);
         void DeleteAdmin(int id);
-
-        
     }
 }

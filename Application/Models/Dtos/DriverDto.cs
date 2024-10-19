@@ -8,33 +8,33 @@ using System.Threading.Tasks;
 
 namespace Application.Models.Dtos
 {
-    public class AdminDto
+    public class DriverDto
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public static AdminDto ToDto(Admin admin)
+        public static DriverDto ToDto(Driver driver)
         {
-            var dto = new AdminDto
+            var dto = new DriverDto
             {
-                Id = admin.Id,
-                Name = admin.Name
+                Id = driver.Id,
+                Name = driver.Name
             };
 
             return dto;
         }
-        public static List<AdminDto> ToDto(List<Admin> admins)
+        public static List<DriverDto> ToDto(List<Driver> drivers)
         {
-            return admins.Select(admin => ToDto(admin)).ToList();
+            return drivers.Select(driver => ToDto(driver)).ToList();
         }
-        public static Admin ToEntity(AdminSaveRequest dto)
+        public static Driver ToEntity(DriverSaveRequest dto)
         {
-            var admin = new Admin
+            var driver = new Driver
             {
                 Name = dto.Name,
                 Password = dto.Password,
             };
 
-            return admin;
+            return driver;
         }
     }
 }

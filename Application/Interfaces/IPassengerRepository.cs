@@ -2,7 +2,6 @@
 using Application.Models.Requests;
 using Domain.Entities;
 using Domain.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +10,11 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IAdminRepository : IRepositoryBase<Admin>
+    public interface IPassengerRepository : IRepositoryBase<Passenger>
     {
-        List<AdminDto> GetAll();
-        Admin? GetById(int id);
+        List<PassengerDto> GetAll();
+        Passenger? GetById(int id);
 
-        void UpdateEntity(int id, AdminSaveRequest entity);
-
-
+        void UpdateEntity(int id, PassengerSaveRequest entity);
     }
-
 }

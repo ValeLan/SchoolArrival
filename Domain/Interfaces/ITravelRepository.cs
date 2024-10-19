@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface ISchoolRepository : IRepositoryBase<School>
+    public interface ITravelRepository : IRepositoryBase<Travel>
     {
-        School? GetById(int id);
-
-        void UpdateEntity(int id, School entity);
+        Travel? GetById(int id);
     }
 }

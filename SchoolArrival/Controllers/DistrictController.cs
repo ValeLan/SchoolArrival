@@ -11,7 +11,7 @@ namespace SchoolArrival.Controllers
     public class DistrictController : Controller
     {
         private readonly IDistrictServices _districtServices;
-        public DistrictController(IDistrictServices districtServices) 
+        public DistrictController(IDistrictServices districtServices)
         {
             _districtServices = districtServices;
         }
@@ -29,16 +29,24 @@ namespace SchoolArrival.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateDistrict([FromBody]District request)
+        public IActionResult CreateDistrict([FromBody] District request)
         {
             _districtServices.CreateDistrict(request);
             return Ok(request);
         }
 
         [HttpPut]
-        public IActionResult UpdateDistrict([FromQuery] int id, District request) 
+        public IActionResult UpdateDistrict([FromQuery] int id, District request)
         {
             _districtServices.UpdateDistrict(id, request);
+            return Ok();
+        }
+
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteDistrict([FromRoute] int id)
+        {
+            _districtServices.DeleteDistrict(id);
             return Ok();
         }
     }
