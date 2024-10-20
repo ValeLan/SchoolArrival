@@ -27,5 +27,11 @@ namespace Infraestructure.Data
                 _context.SaveChanges();
             }
         }
+
+        public List<string> GetSchoolsNames()
+        {
+            return _context.Schools.Select(e => e.Name).ToList();
+        }
+
     }
 }

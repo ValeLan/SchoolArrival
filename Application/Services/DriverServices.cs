@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models.Dtos;
 using Application.Models.Requests;
+using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,12 @@ namespace Application.Services
     public class DriverServices : IDriverServices
     {
         private readonly IDriverRepository _driverRepository;
-        public DriverServices(IDriverRepository driverRepository)
+
+        private readonly ITravelRepository _travelRepository;
+        public DriverServices(IDriverRepository driverRepository, ITravelRepository travelRepository)
         {
             _driverRepository = driverRepository;
+            _travelRepository = travelRepository;
         }
 
         public List<DriverDto> GetAll()
@@ -38,6 +42,7 @@ namespace Application.Services
             var entity = DriverDto.ToEntity(driver);
 
             _driverRepository.Add(entity);
+            _driverRepository.UpdateEntity(entity.Id, driver);
             return DriverDto.ToDto(entity);
         }
 

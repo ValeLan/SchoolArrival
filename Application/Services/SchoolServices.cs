@@ -12,10 +12,12 @@ namespace Application.Services
     public class SchoolServices : ISchoolServices
     {
         private readonly ISchoolRepository _repository;
+        private readonly IPassengerRepository _passengerRepository;
 
-        public SchoolServices(ISchoolRepository repository)
+        public SchoolServices(ISchoolRepository repository, IPassengerRepository passengerRepository)
         {  
            _repository = repository; 
+           _passengerRepository = passengerRepository;
         }
 
         public List<School> GetAll()
@@ -32,6 +34,7 @@ namespace Application.Services
 
         public School CreateSchool(School newSchool)
         {
+            newSchool.Passengers = _passengerRepository.GetBySchool(newSchool.Id);
             _repository.Add(newSchool);
             return newSchool;
         }

@@ -15,5 +15,9 @@ namespace Application.Models.Requests
         public string StundentDNI { get; set; } = string.Empty;
         public string StudentAdress { get; set; } = string.Empty;
         public DateTime Hour { get; set; }
+
+        public int SchoolId { get; set; }
+
+        public int DistrictId {  get; set; }
     }
 }

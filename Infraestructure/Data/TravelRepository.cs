@@ -19,6 +19,10 @@ namespace Infraestructure.Data
             return _context.Travels.FirstOrDefault(e => e.Id == id);
         }
 
-        
+        //Preguntar como evitar no saber si devuelve null o no
+        public List<Travel> GetByDriver(int id)
+        {
+            return _context.Travels.Where(e => e.Driver.Id == id).ToList();  
+        }
     }
 }

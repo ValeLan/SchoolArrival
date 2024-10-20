@@ -12,5 +12,8 @@ namespace Domain.Interfaces
         School? GetById(int id);
 
         void UpdateEntity(int id, School entity);
+
+        List<string> GetSchoolsNames();
+
     }
 }

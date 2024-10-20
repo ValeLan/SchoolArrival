@@ -10,5 +10,6 @@ namespace Domain.Interfaces
     public interface ITravelRepository : IRepositoryBase<Travel>
     {
         Travel? GetById(int id);
+        List<Travel> GetByDriver(int id);
     }
 }

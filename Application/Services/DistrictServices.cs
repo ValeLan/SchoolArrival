@@ -14,10 +14,12 @@ namespace Application.Services
     public class DistrictServices : IDistrictServices
     {
         private readonly IDistrictRepository _districtRepository;
+        private readonly IPassengerRepository _passengerRepository;
 
-        public DistrictServices(IDistrictRepository repository)
+        public DistrictServices(IDistrictRepository repository, IPassengerRepository passengerRepository)
         {
             _districtRepository = repository;
+            _passengerRepository = passengerRepository;
         }
 
         public List<District> GetAll()
@@ -34,6 +36,7 @@ namespace Application.Services
 
         public District CreateDistrict(District newDistrict)
         {
+            newDistrict.Passengers = _passengerRepository.GetBySchool(newDistrict.Id);
             _districtRepository.Add(newDistrict);
             return newDistrict;
         }

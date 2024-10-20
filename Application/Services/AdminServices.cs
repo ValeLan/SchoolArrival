@@ -15,10 +15,13 @@ namespace Application.Services
     public class AdminServices : IAdminServices
     {
         private readonly IAdminRepository _adminRepository;
-
-        public AdminServices(IAdminRepository adminRepository) 
+        private readonly ISchoolRepository _schoolRepository;
+        private readonly IDistrictRepository _districtRepository;
+        public AdminServices(IAdminRepository adminRepository, ISchoolRepository schoolRepository, IDistrictRepository distictRepository) 
         { 
             _adminRepository = adminRepository;
+            _schoolRepository = schoolRepository;
+            _districtRepository = distictRepository;
         }
 
         public List<AdminDto> GetAll()
@@ -40,7 +43,8 @@ namespace Application.Services
         public AdminDto CreateAdmin(AdminSaveRequest adminDto) 
         {
             var entity = AdminDto.ToEntity(adminDto);
-
+            entity.Districts = _districtRepository.GetDistrictNames();
+            entity.Schools = _schoolRepository.GetSchoolsNames();
             _adminRepository.Add(entity);
             return AdminDto.ToDto(entity);
         }

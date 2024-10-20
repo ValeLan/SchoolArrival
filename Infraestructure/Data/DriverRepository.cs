@@ -2,6 +2,7 @@
 using Application.Models.Dtos;
 using Application.Models.Requests;
 using Domain.Entities;
+using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,7 @@ namespace Infraestructure.Data
             {
                 DriverToUpdate.Name = entity.Name;
                 DriverToUpdate.Password = entity.Password;
+                DriverToUpdate.Travels = _context.Travels.Where( e => e.Driver.Id == DriverToUpdate.Id ).ToList();
                 _context.SaveChanges();
             }
         }

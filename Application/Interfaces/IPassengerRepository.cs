@@ -16,5 +16,7 @@ namespace Application.Interfaces
         Passenger? GetById(int id);
 
         void UpdateEntity(int id, PassengerSaveRequest entity);
+
+        List<Passenger> GetBySchool(int id);
     }
 }

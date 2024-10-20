@@ -40,5 +40,10 @@ namespace Infraestructure.Data
             }
         }
 
+        public List<Passenger> GetBySchool(int id)
+        {
+            return _context.Passengers.Where(e => e.School.Id == id).ToList();
+        }
+
     }
 }
