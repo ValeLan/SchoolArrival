@@ -3,6 +3,7 @@ using System;
 using Infraestructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestructure.Migrations
 {
     [DbContext(typeof(TravelArrivalDbContext))]
-    partial class TravelArrivalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241022171418_ActualizamosEntites")]
+    partial class ActualizamosEntites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -135,7 +138,7 @@ namespace Infraestructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DriverId")
+                    b.Property<int?>("DriverId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("State")
@@ -188,13 +191,9 @@ namespace Infraestructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Travel", b =>
                 {
-                    b.HasOne("Domain.Entities.Driver", "Driver")
+                    b.HasOne("Domain.Entities.Driver", null)
                         .WithMany("Travels")
-                        .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Driver");
+                        .HasForeignKey("DriverId");
                 });
 
             modelBuilder.Entity("PassengerTravel", b =>

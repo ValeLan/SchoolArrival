@@ -11,9 +11,9 @@ namespace Application.Interfaces
     public interface IDriverServices
     {
         List<DriverDto> GetAll();
-        DriverDto? GetById(int id);
-        DriverDto CreateDriver(DriverSaveRequest driver);
-        void UpdateDriver(int id, DriverSaveRequest driver);
-        void DeleteDriver(int id);
+        //DriverDto? GetById(int id);
+        Task<DriverDto> CreateDriverAsync(DriverSaveRequest driver);
+        //void UpdateDriver(int id, DriverSaveRequest driver);
+        //void DeleteDriver(int id);
     }
 }

@@ -10,12 +10,8 @@ namespace Application.Models.Dtos
     public class TravelDto
     {
         public int Id { get; set; }
-        public TravelState State { get; set; } = TravelState.EnCamino;
-
+        public string State { get; set; } 
         public string StudentAdress { get; set; }
-
-        public DriverDto Driver { get; set; }
-
-        public List<PassengerDto> Passengers { get; set; }
+        public List<PassengerDto> Passengers { get; set; } = new List<PassengerDto>();
     }
 }

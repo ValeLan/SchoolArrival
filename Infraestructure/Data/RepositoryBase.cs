@@ -1,40 +1,56 @@
 ﻿using Domain.Interfaces;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
+using ConsultaAlumnos.Domain.Interfaces;
 
-namespace Infraestructure.Data
+namespace SchoolArrival.Infrastructure.Data;
+
+
+public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {
-    public class RepositoryBase<T> : IRepositoryBase<T> where T : class
+    private readonly DbContext _dbContext;
+
+    public RepositoryBase(DbContext dbContext)
     {
-        public TravelArrivalDbContext _context;
-
-        public RepositoryBase(TravelArrivalDbContext context) 
-        {
-            _context = context;
-        }
-
-        public List<T> Get()
-        {
-            return _context.Set<T>().ToList();
-        }
-
-        
-        //Preguntar por el metodo para modificar
-        public void Add(T entity) 
-        {
-            _context.Set<T>().Add(entity);
-            _context.SaveChanges();
-        }
-
-        public void Remove(int id)
-        {
-            var entity = _context.Set<T>().Find(id);
-            if (entity != null)
-            {
-                _context.Set<T>().Remove(entity);
-                _context.SaveChanges();
-            }
-        }
+        _dbContext = dbContext;
 
     }
+    public virtual async Task<T?> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull
+    {
+        return await _dbContext.Set<T>().FindAsync(new object[] { id }, cancellationToken: cancellationToken);
+    }
+
+    public virtual async Task<List<T>> ListAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<T>().ToListAsync(cancellationToken);
+    }
+
+    public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
+    {
+        _dbContext.Set<T>().Add(entity);
+
+        await SaveChangesAsync(cancellationToken);
+
+        return entity;
+    }
+
+
+    public virtual async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
+    {
+        _dbContext.Set<T>().Update(entity);
+
+        await SaveChangesAsync(cancellationToken);
+    }
+
+    public virtual async Task DeleteAsync(T entity, CancellationToken cancellationToken = default)
+    {
+        _dbContext.Set<T>().Remove(entity);
+
+        await SaveChangesAsync(cancellationToken);
+    }
+
+    public virtual async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
 }

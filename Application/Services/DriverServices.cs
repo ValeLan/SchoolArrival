@@ -1,6 +1,9 @@
 ﻿using Application.Interfaces;
+using Application.Mapping;
 using Application.Models.Dtos;
 using Application.Models.Requests;
+using ConsultaAlumnos.Domain.Interfaces;
+using Domain.Entities;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,48 +15,55 @@ namespace Application.Services
 {
     public class DriverServices : IDriverServices
     {
+        private readonly IRepositoryBase<Travel> _travelRepositoryBase;
+        private readonly IRepositoryBase<Driver> _driverRepositoryBase;
         private readonly IDriverRepository _driverRepository;
 
-        private readonly ITravelRepository _travelRepository;
-        public DriverServices(IDriverRepository driverRepository, ITravelRepository travelRepository)
+
+        private readonly DriverMapping _mapping;
+        public DriverServices(IRepositoryBase<Travel> travelRepositoryBase, IDriverRepository driverRepository, DriverMapping mapping, IRepositoryBase<Driver> driverRepositoryBase)
         {
+            _travelRepositoryBase = travelRepositoryBase;
             _driverRepository = driverRepository;
-            _travelRepository = travelRepository;
+            _mapping = mapping;
+            _driverRepositoryBase = driverRepositoryBase;
         }
 
         public List<DriverDto> GetAll()
         {
-            return _driverRepository.GetAll();
+            var response = _driverRepository.GetAll();
+            var responseMapped = response.Select(e => _mapping.FromEntityToResponse(e)).ToList();
+            return responseMapped;
+
         }
 
-        public DriverDto? GetById(int id)
+        //public DriverDto? GetById(int id)
+        //{
+        //    var driver = _driverRepository.Get().FirstOrDefault(a => a.Id == id);
+        //    if (driver == null)
+        //    {
+        //        return null;
+        //    }
+
+        //    return DriverDto.ToDto(driver);
+        //}
+
+        public async Task<DriverDto> CreateDriverAsync(DriverSaveRequest driver)
         {
-            var driver = _driverRepository.Get().FirstOrDefault(a => a.Id == id);
-            if (driver == null)
-            {
-                return null;
-            }
+            var entity = _mapping.FromRequestToEntity(driver);
+            var response = await _driverRepositoryBase.AddAsync(entity);
 
-            return DriverDto.ToDto(driver);
+            return _mapping.FromEntityToResponse(response);
         }
 
-        public DriverDto CreateDriver(DriverSaveRequest driver)
-        {
-            var entity = DriverDto.ToEntity(driver);
+        //public void UpdateDriver(int id, DriverSaveRequest driver)
+        //{
+        //    _driverRepository.UpdateEntity(id, driver);
+        //}
 
-            _driverRepository.Add(entity);
-            _driverRepository.UpdateEntity(entity.Id, driver);
-            return DriverDto.ToDto(entity);
-        }
-
-        public void UpdateDriver(int id, DriverSaveRequest driver)
-        {
-            _driverRepository.UpdateEntity(id, driver);
-        }
-
-        public void DeleteDriver(int id)
-        {
-            _driverRepository.Remove(id);
-        }
+        //public void DeleteDriver(int id)
+        //{
+        //    _driverRepository.Remove(id);
+        //}
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface IDistrictRepository : IRepositoryBase<District>
+    public interface IDistrictRepository
     {
         List<District> GetAll();
         District? GetById(int id);

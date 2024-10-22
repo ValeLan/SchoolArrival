@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface ISchoolRepository : IRepositoryBase<School>
+    public interface ISchoolRepository 
     {
         List<School> GetAll();
         School? GetById(int id);

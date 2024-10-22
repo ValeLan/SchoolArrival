@@ -18,34 +18,34 @@ namespace SchoolArrival.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
-            return Ok(_travelServices.GetAll());
+            return Ok(await _travelServices.GetAllAsync());
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Get([FromRoute]int id) 
-        { 
-            return Ok(_travelServices.Get(id));
-        }
+        //[HttpGet("{id}")]
+        //public IActionResult Get([FromRoute]int id) 
+        //{ 
+        //    return Ok(_travelServices.Get(id));
+        //}
 
         [HttpPost]
-        public IActionResult Create([FromBody]TravelDto travel)
+        public async Task<IActionResult> CreateAsync([FromBody]TravelSaveRequest travel)
         {
-            return Ok(_travelServices.Create(travel));
+            return Ok(await _travelServices.CreateAsync(travel));
         }
 
-        [HttpPut]
-        public IActionResult Update([FromQuery] int id, TravelSaveRequest travel) 
-        {
-            _travelServices.UpdateEntity(id, travel);
-            return Ok();
-        }
+        //[HttpPut]
+        //public IActionResult Update([FromQuery] int id, TravelSaveRequest travel) 
+        //{
+        //    _travelServices.UpdateEntity(id, travel);
+        //    return Ok();
+        //}
 
-        [HttpDelete]
-        public IActionResult Delete(int id) 
-        {
-            return Ok(_travelServices.Delete(id));
-        }
+        //[HttpDelete]
+        //public IActionResult Delete(int id) 
+        //{
+        //    return Ok(_travelServices.Delete(id));
+        //}
     }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface ITravelRepository : IRepositoryBase<Travel>
+    public interface ITravelRepository 
     {
          Travel? GetById(int id);
          List<Travel> GetByDriver(int id);

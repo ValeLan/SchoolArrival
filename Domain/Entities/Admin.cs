@@ -8,7 +8,6 @@ namespace Domain.Entities
 {
     public class Admin : User
     {
-        public List<District> Districts { get; set; } = [];
-        public List<School> Schools { get; set; } = [];
+
     }
 }

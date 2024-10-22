@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IPassengerRepository : IRepositoryBase<Passenger>
+    public interface IPassengerRepository 
     {
         List<PassengerDto> GetAll();
         Passenger? GetById(int id);

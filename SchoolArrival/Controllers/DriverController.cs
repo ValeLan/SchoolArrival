@@ -22,32 +22,32 @@ namespace SchoolArrival.Controllers
             return Ok(_driverServices.GetAll());
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Get([FromRoute] int id)
-        {
-            return Ok(_driverServices.GetById(id));
-        }
+        //[HttpGet("{id}")]
+        //public IActionResult Get([FromRoute] int id)
+        //{
+        //    return Ok(_driverServices.GetById(id));
+        //}
 
         [HttpPost]
-        public IActionResult Create(DriverSaveRequest request)
+        public async Task<IActionResult> CreateAsync(DriverSaveRequest request)
         {
-            _driverServices.CreateDriver(request);
-            return Ok();
+            var response = await _driverServices.CreateDriverAsync(request);
+            return Ok(response);
         }
 
-        [HttpPut]
-        public IActionResult Update([FromQuery] int id, DriverSaveRequest request)
-        {
-            _driverServices.UpdateDriver(id, request);
-            return Ok();
-        }
+        //[HttpPut]
+        //public IActionResult Update([FromQuery] int id, DriverSaveRequest request)
+        //{
+        //    _driverServices.UpdateDriver(id, request);
+        //    return Ok();
+        //}
 
-        [HttpDelete]
-        public IActionResult Delete(int id)
-        {
-            _driverServices.DeleteDriver(id);
-            return Ok();
-        }
+        //[HttpDelete]
+        //public IActionResult Delete(int id)
+        //{
+        //    _driverServices.DeleteDriver(id);
+        //    return Ok();
+        //}
 
     }
 }
