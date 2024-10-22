@@ -9,11 +9,12 @@ namespace Domain.Interfaces
 {
     public interface ISchoolRepository : IRepositoryBase<School>
     {
+        List<School> GetAll();
         School? GetById(int id);
 
         void UpdateEntity(int id, School entity);
 
-        List<string> GetSchoolsNames();
+        List<School> GetByIds(List<int> ids);
 
     }
 }

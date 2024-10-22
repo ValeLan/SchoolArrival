@@ -29,7 +29,7 @@ namespace SchoolArrival.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateDistrict([FromBody] District request)
+        public IActionResult CreateDistrict([FromBody] DistrictSaveRequest request)
         {
             _districtServices.CreateDistrict(request);
             return Ok(request);

@@ -22,7 +22,7 @@ namespace Application.Services
 
         public List<School> GetAll()
         {
-            return _repository.Get();
+            return _repository.GetAll();
         }
 
         public School? GetById(int id)

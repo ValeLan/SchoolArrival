@@ -3,6 +3,7 @@ using System;
 using Infraestructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestructure.Migrations
 {
     [DbContext(typeof(TravelArrivalDbContext))]
-    partial class TravelArrivalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241021163030_Actualice algunas entidades para que funcione mejor")]
+    partial class Actualicealgunasentidadesparaquefuncionemejor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -81,7 +84,7 @@ namespace Infraestructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DistrictId")
+                    b.Property<int?>("DistrictId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Hour")
@@ -99,7 +102,7 @@ namespace Infraestructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SchoolId")
+                    b.Property<int?>("SchoolId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("StudentAdress")
@@ -145,7 +148,7 @@ namespace Infraestructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DriverId")
+                    b.Property<int?>("DriverId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("State")
@@ -188,15 +191,11 @@ namespace Infraestructure.Migrations
                 {
                     b.HasOne("Domain.Entities.District", "District")
                         .WithMany("Passengers")
-                        .HasForeignKey("DistrictId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DistrictId");
 
                     b.HasOne("Domain.Entities.School", "School")
                         .WithMany("Passengers")
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SchoolId");
 
                     b.Navigation("District");
 
@@ -214,9 +213,7 @@ namespace Infraestructure.Migrations
                 {
                     b.HasOne("Domain.Entities.Driver", "Driver")
                         .WithMany("Travels")
-                        .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DriverId");
 
                     b.Navigation("Driver");
                 });

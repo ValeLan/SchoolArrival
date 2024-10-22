@@ -13,7 +13,7 @@ namespace Application.Interfaces
     {
         List<District> GetAll();
         District? GetById(int id);
-        District CreateDistrict(District newDistrict);
+        string CreateDistrict(DistrictSaveRequest newDistrict);
         void UpdateDistrict(int id, District newDistrict);
         void DeleteDistrict(int id);
     }

@@ -24,7 +24,7 @@ namespace Application.Services
 
         public List<District> GetAll()
         {
-            return _districtRepository.Get();
+            return _districtRepository.GetAll();
         }
 
         public District? GetById(int id)
@@ -34,11 +34,20 @@ namespace Application.Services
             return district.FirstOrDefault(a => a.Id == id);
         }
 
-        public District CreateDistrict(District newDistrict)
+        public string CreateDistrict(DistrictSaveRequest newDistrictRequest)
         {
-            newDistrict.Passengers = _passengerRepository.GetBySchool(newDistrict.Id);
-            _districtRepository.Add(newDistrict);
-            return newDistrict;
+            var district = new District
+            {
+                Name = newDistrictRequest.Name,
+                Passengers = new List<Passenger>()
+            };
+            var passengers = _passengerRepository.GetByIds(newDistrictRequest.PassengersIds);
+            district.Passengers.AddRange(passengers);
+
+            _districtRepository.Add(district);
+            _districtRepository.SaveChanges();
+
+            return "Distrito creado con exito,";
         }
 
         public void UpdateDistrict(int id, District newDistrict)

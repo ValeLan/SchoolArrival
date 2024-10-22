@@ -31,7 +31,7 @@ namespace Application.Services
 
         public AdminDto? GetById(int id) 
         {
-            var admin = _adminRepository.Get().FirstOrDefault(a => a.Id == id);
+            var admin = _adminRepository.GetById(id);
             if (admin == null)
             {
                 return null;
@@ -43,8 +43,8 @@ namespace Application.Services
         public AdminDto CreateAdmin(AdminSaveRequest adminDto) 
         {
             var entity = AdminDto.ToEntity(adminDto);
-            entity.Districts = _districtRepository.GetDistrictNames();
-            entity.Schools = _schoolRepository.GetSchoolsNames();
+            entity.Districts = _districtRepository.GetByIds(adminDto.DistrictsIds);
+            entity.Schools = _schoolRepository.GetByIds(adminDto.SchoolsIds);
             _adminRepository.Add(entity);
             return AdminDto.ToDto(entity);
         }

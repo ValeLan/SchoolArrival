@@ -14,8 +14,8 @@ namespace Domain.Entities
         public string StundentDNI {  get; set; } = string.Empty;
         public string StudentAdress {  get; set; } = string.Empty;
         public DateTime Hour { get; set; }
-        public District? District {  get; set; }
-        public School? School { get; set; }
+        public District District {  get; set; }
+        public School School { get; set; }
         public List<Travel> Travels { get; set; } = [];
     }
 }

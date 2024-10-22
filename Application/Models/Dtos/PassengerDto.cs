@@ -17,6 +17,9 @@ namespace Application.Models.Dtos
         public string StundentDNI { get; set; } = string.Empty;
         public string StudentAdress { get; set; } = string.Empty;
         public DateTime Hour { get; set; }
+        public DistrictDto? District { get; set; }
+        public SchoolDto? School { get; set; }
+        public List<TravelDto>? Travels { get; set; }
 
         public static PassengerDto ToDto(Passenger entity)
         {
@@ -51,6 +54,24 @@ namespace Application.Models.Dtos
             };
 
             return entity;
+        }
+
+        public static Passenger ToEntity(PassengerDto dto)
+        {
+            var newPassenger = new Passenger
+            {
+                Name = dto.Name,
+                PhoneNumber = dto.PhoneNumber,
+                StundentDNI = dto.StundentDNI,
+                StudentAdress = dto.StudentAdress,
+                Hour = dto.Hour,
+            };
+            return newPassenger;
+        }
+
+        public static List<Passenger> ToEntity(List<PassengerDto> dto)
+        {
+            return dto.Select(dto => ToEntity(dto)).ToList();
         }
     }
 }

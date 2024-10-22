@@ -3,6 +3,7 @@ using Application.Models.Dtos;
 using Application.Models.Requests;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +18,19 @@ namespace Infraestructure.Data
 
         public List<DriverDto> GetAll()
         {
-            var dto = _context.Drivers.ToList();
+            var dto = _context.Drivers
+                .Include(e => e.Travels)
+                .ThenInclude(t => t.Passengers)
+                .ToList();
 
             return DriverDto.ToDto(dto);
         }
         public Driver? GetById(int id)
         {
-            return _context.Drivers.FirstOrDefault(e => e.Id == id);
+            return _context.Drivers
+                .Include(a => a.Travels)
+                .ThenInclude(t => t.Passengers)
+                .FirstOrDefault(e => e.Id == id);
         }
 
         public void UpdateEntity(int id, DriverSaveRequest entity)

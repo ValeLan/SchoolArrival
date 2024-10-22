@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models.Dtos;
+using Application.Models.Requests;
 using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Models;
@@ -15,15 +16,19 @@ namespace Application.Services
     public class TravelServices : ITravelServices
     {
         private readonly ITravelRepository _travelRepository;
+        private readonly IDriverRepository _driverRepository;
+        private readonly IPassengerRepository _passengerRepository;
 
-        public TravelServices(ITravelRepository travelRepository)
+        public TravelServices(ITravelRepository travelRepository, IDriverRepository driverRepository, IPassengerRepository passengerRepository)
         {
             _travelRepository = travelRepository;
+            _driverRepository = driverRepository;
+            _passengerRepository = passengerRepository;
         }
 
-        public List<Travel> GetAll()
+        public List<TravelDto> GetAll()
         {
-            return _travelRepository.Get();
+            return _travelRepository.GetAll();
         }
 
         public Travel? Get(int id) 
@@ -33,9 +38,15 @@ namespace Application.Services
 
         public TravelDto Create(TravelDto travel)
         {
-            var newTravel = TravelDto.ToEntity(travel);
+            var newTravel = TravelSaveRequest.ToEntity(travel);
+            newTravel.Driver = _driverRepository.GetById(travel.Driver.Id);
+            var allPassengers = _passengerRepository.GetAll();
+            newTravel.Passengers = allPassengers
+                .Where(p => p.Travels.Any(t => t.Id == newTravel.Id))
+                .Select(e => PassengerDto.ToEntity(e))
+                .ToList();
             _travelRepository.Add(newTravel);
-            return TravelDto.ToDto(newTravel);
+            return TravelSaveRequest.ToDto(newTravel);
         }  
 
         public string TSEnCamino(int id)
@@ -68,15 +79,30 @@ namespace Application.Services
             }
         }
 
-        public void UpdateEntity(int id, Travel entity)
+        public string UpdateEntity(int id, TravelSaveRequest entity)
         {
             var TravelToUpdate = _travelRepository.GetById(id);
 
             if (TravelToUpdate != null)
             {
+                TravelToUpdate.State = entity.State;
                 TravelToUpdate.StudentAdress = entity.StudentAdress;
+                TravelToUpdate.Driver = _driverRepository.GetById(entity.DriverId);
+                var passengersToUpdate = _passengerRepository.GetAll()
+                    .Where(p => entity.PassengersIds.Contains(p.Id))
+                    .Select(PassengerDto.ToEntity)
+                    .ToList();
+                TravelToUpdate.Passengers = passengersToUpdate;
+
+                _travelRepository.UpdateEntity(TravelToUpdate);
+
+                return "Actualizado con éxito.";
             }
+            else { return "No se encontro viaje."; }
+
+            
         }
+
 
         public string Delete(int id)
         { 

@@ -1,5 +1,4 @@
-﻿using Domain.Entities;
-using Domain.Models;
+﻿using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,28 +9,13 @@ namespace Application.Models.Dtos
 {
     public class TravelDto
     {
-        public TravelState State { get; set; }
-        public string StudentAdress { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public TravelState State { get; set; } = TravelState.EnCamino;
 
-        public static Travel ToEntity(TravelDto dto)
-        {
-            Travel travel = new Travel
-            {
-                State = dto.State,
-                StudentAdress = dto.StudentAdress
-            };
-            return travel;
-        }
+        public string StudentAdress { get; set; }
 
-        public static TravelDto ToDto(Travel travel)
-        {
-            TravelDto dto = new TravelDto
-            {
-                State = travel.State,
-                StudentAdress = travel.StudentAdress
-            };
-            return dto;
-        }
+        public DriverDto Driver { get; set; }
 
+        public List<PassengerDto> Passengers { get; set; }
     }
 }

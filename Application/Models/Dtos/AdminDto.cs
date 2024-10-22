@@ -12,17 +12,21 @@ namespace Application.Models.Dtos
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
+        public List<string> Districts { get; set; } = [];
+        public List<SchoolDto> Schools { get; set; } = [];
         public static AdminDto ToDto(Admin admin)
         {
             var dto = new AdminDto
             {
                 Id = admin.Id,
-                Name = admin.Name
+                Name = admin.Name,
+                Districts = admin.Districts.Select(d => d.Name).ToList(),
+                Schools = admin.Schools.Select(s => new SchoolDto { Id = s.Id, Name = s.Name }).ToList()
             };
 
             return dto;
         }
-        public static List<AdminDto> ToDto(List<Admin> admins)
+        public static List<AdminDto> ToDtos(List<Admin> admins)
         {
             return admins.Select(admin => ToDto(admin)).ToList();
         }

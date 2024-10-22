@@ -15,8 +15,11 @@ namespace Application.Interfaces
         List<PassengerDto> GetAll();
         Passenger? GetById(int id);
 
+        List<Passenger> GetByIds(List<int> ids);
+
         void UpdateEntity(int id, PassengerSaveRequest entity);
 
         List<Passenger> GetBySchool(int id);
+        List<Passenger> GetByDistrict(int id);
     }
 }

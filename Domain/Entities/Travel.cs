@@ -16,7 +16,7 @@ namespace Domain.Entities
         public int Id { get; set; }
         public TravelState State {  get; set; }
         public string StudentAdress { get; set; } = string.Empty;
-        public Driver? Driver { get; set; }
+        public Driver Driver { get; set; }
         public List<Passenger> Passengers { get; set; } = [];
 
     }

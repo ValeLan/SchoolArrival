@@ -1,4 +1,5 @@
 ﻿using Application.Models.Dtos;
+using Application.Models.Requests;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Application.Interfaces
 {
     public interface ITravelServices
     {
-        List<Travel> GetAll();
+        List<TravelDto> GetAll();
         Travel? Get(int id);
         TravelDto Create(TravelDto travel);
 
@@ -18,7 +19,7 @@ namespace Application.Interfaces
 
         string TSCompletado(int id);
 
-        void UpdateEntity(int id, Travel entity);
+        string UpdateEntity(int id, TravelSaveRequest entity);
 
         string Delete(int id);
     }

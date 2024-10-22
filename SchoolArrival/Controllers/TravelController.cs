@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models.Dtos;
+using Application.Models.Requests;
 using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +36,7 @@ namespace SchoolArrival.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update([FromQuery] int id, Travel travel) 
+        public IActionResult Update([FromQuery] int id, TravelSaveRequest travel) 
         {
             _travelServices.UpdateEntity(id, travel);
             return Ok();

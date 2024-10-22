@@ -8,7 +8,7 @@ namespace Domain.Entities
 {
     public class Admin : User
     {
-        public List<string> Districts { get; set; } = [];
-        public List<string> Schools { get; set; } = [];
+        public List<District> Districts { get; set; } = [];
+        public List<School> Schools { get; set; } = [];
     }
 }
