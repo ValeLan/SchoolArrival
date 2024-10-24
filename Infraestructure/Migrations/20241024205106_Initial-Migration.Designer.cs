@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestructure.Migrations
 {
     [DbContext(typeof(TravelArrivalDbContext))]
-    [Migration("20241022171418_ActualizamosEntites")]
-    partial class ActualizamosEntites
+    [Migration("20241024205106_Initial-Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,32 +26,15 @@ namespace Infraestructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<string>("FullName")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("Admins");
-                });
-
-            modelBuilder.Entity("Domain.Entities.District", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Districts");
                 });
 
             modelBuilder.Entity("Domain.Entities.Driver", b =>
@@ -60,12 +43,10 @@ namespace Infraestructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<string>("FullName")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -79,40 +60,38 @@ namespace Infraestructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DistrictId")
+                    b.Property<int?>("District")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Hour")
+                    b.Property<string>("FullName")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<string>("Hour")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SchoolId")
+                    b.Property<int?>("SchoolId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("StudentAdress")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("StundentDNI")
-                        .IsRequired()
+                    b.Property<string>("StudentDNI")
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("TravelId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DistrictId");
-
                     b.HasIndex("SchoolId");
+
+                    b.HasIndex("TravelId");
 
                     b.ToTable("Passengers");
                 });
@@ -124,7 +103,6 @@ namespace Infraestructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -141,11 +119,10 @@ namespace Infraestructure.Migrations
                     b.Property<int?>("DriverId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("State")
+                    b.Property<int?>("State")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("StudentAdress")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -155,65 +132,24 @@ namespace Infraestructure.Migrations
                     b.ToTable("Travels");
                 });
 
-            modelBuilder.Entity("PassengerTravel", b =>
-                {
-                    b.Property<int>("PassengersId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("TravelsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("PassengersId", "TravelsId");
-
-                    b.HasIndex("TravelsId");
-
-                    b.ToTable("PassengerTravel");
-                });
-
             modelBuilder.Entity("Domain.Entities.Passenger", b =>
                 {
-                    b.HasOne("Domain.Entities.District", "District")
+                    b.HasOne("Domain.Entities.School", null)
                         .WithMany("Passengers")
-                        .HasForeignKey("DistrictId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SchoolId");
 
-                    b.HasOne("Domain.Entities.School", "School")
-                        .WithMany("Passengers")
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("District");
-
-                    b.Navigation("School");
+                    b.HasOne("Domain.Entities.Travel", null)
+                        .WithMany("Passenger")
+                        .HasForeignKey("TravelId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Travel", b =>
                 {
-                    b.HasOne("Domain.Entities.Driver", null)
+                    b.HasOne("Domain.Entities.Driver", "Driver")
                         .WithMany("Travels")
                         .HasForeignKey("DriverId");
-                });
 
-            modelBuilder.Entity("PassengerTravel", b =>
-                {
-                    b.HasOne("Domain.Entities.Passenger", null)
-                        .WithMany()
-                        .HasForeignKey("PassengersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Travel", null)
-                        .WithMany()
-                        .HasForeignKey("TravelsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.District", b =>
-                {
-                    b.Navigation("Passengers");
+                    b.Navigation("Driver");
                 });
 
             modelBuilder.Entity("Domain.Entities.Driver", b =>
@@ -224,6 +160,11 @@ namespace Infraestructure.Migrations
             modelBuilder.Entity("Domain.Entities.School", b =>
                 {
                     b.Navigation("Passengers");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Travel", b =>
+                {
+                    b.Navigation("Passenger");
                 });
 #pragma warning restore 612, 618
         }

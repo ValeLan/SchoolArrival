@@ -1,4 +1,6 @@
-﻿using Domain.Entities;
+﻿using Application.Models.Dtos;
+using Application.Models.Requests;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +11,7 @@ namespace Application.Interfaces
 {
     public interface ISchoolServices
     {
-        List<School> GetAll();
-        School? GetById(int id);
-        School CreateSchool(School newSchool);
-        void UpdateSchool(int id, School newSchool);
-        void DeleteSchool(int id);
+        Task<List<SchoolDto>> GetAllAsync();
+        Task<SchoolDto> CreateSchoolAsync(SchoolSaveRequest school);
     }
 }

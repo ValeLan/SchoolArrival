@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Models.Requests;
 using Application.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -9,44 +10,49 @@ namespace SchoolArrival.Controllers
     [ApiController]
     public class SchoolController : Controller
     {
-        private readonly ISchoolServices _services;
+        private readonly ISchoolServices _schoolServices;
         public SchoolController(ISchoolServices services)
         {
-            _services = services;
+            _schoolServices = services;
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(_services.GetAll());
+            var school = await _schoolServices.GetAllAsync();
+            if (school.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(school);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Get([FromRoute] int id)
-        {
-            return Ok(_services.GetById(id));
-        }
+        //[HttpGet("{id}")]
+        //public IActionResult Get([FromRoute] int id)
+        //{
+        //    return Ok(_services.GetById(id));
+        //}
 
         [HttpPost]
-        public IActionResult CreateSchool([FromBody] School request)
+        public async Task<IActionResult> CreateAsync(SchoolSaveRequest request)
         {
-            _services.CreateSchool(request);
-            return Ok(request);
+            var response = await _schoolServices.CreateSchoolAsync(request);
+            return Ok(response);
         }
 
-        [HttpPut]
-        public IActionResult UpdateSchool([FromQuery] int id, School request)
-        {
-            _services.UpdateSchool(id, request);
-            return Ok();
-        }
+        //[HttpPut]
+        //public IActionResult UpdateSchool([FromQuery] int id, School request)
+        //{
+        //    _services.UpdateSchool(id, request);
+        //    return Ok();
+        //}
 
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteSchool([FromRoute] int id)
-        {
-            _services.DeleteSchool(id);
-            return Ok();
-        }
+        //[HttpDelete("{id}")]
+        //public IActionResult DeleteSchool([FromRoute] int id)
+        //{
+        //    _services.DeleteSchool(id);
+        //    return Ok();
+        //}
     }
 }

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConsultaAlumnos.Domain.Interfaces;
+﻿namespace ConsultaAlumnos.Domain.Interfaces;
 
 public interface IRepositoryBase<T> where T : class
 {

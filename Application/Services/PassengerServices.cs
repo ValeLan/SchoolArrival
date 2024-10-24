@@ -28,9 +28,9 @@ namespace Application.Services
             _travelRepositoryBase = travelRepositoryBase;
         }
 
-        public List<PassengerDto> GetAll()
+        public async Task<List<PassengerDto>> GetAllAsync()
         {
-            var response = _passengerRepository.GetAll();
+            var response = await _passengerRepositoryBase.ListAsync();
             var responseMapped = response.Select(e => _passengerMapping.FromEntityToResponse(e)).ToList();
             return responseMapped;
 
@@ -44,31 +44,23 @@ namespace Application.Services
         }
         public async Task CreateAsync(PassengerSaveRequest request)
         {
-            var client = new Passenger();
-            client.FullName = request.FullName;
-            client.PhoneNumber = request.PhoneNumber;
-            client.StudentDNI = request.StundentDNI;
-            client.StudentAdress = request.StudentAdress;
-            client.DistrictId = request.DistrictId;
-            client.SchoolId = request.SchoolId;
-            client.ClientId = request.ClientId;
-            client.Travels = [];
-                foreach(int id in request.TravelIds)
-                {
-                    var travel = await _travelRepositoryBase.GetByIdAsync(id);
-                    client.Travels.Add(travel);
-                }
-            var response = await _passengerRepositoryBase.AddAsync(client);
+            var entity = _passengerMapping.FromRequestToEntity(request);
+            var response = await _passengerRepositoryBase.AddAsync(entity);
         }
 
-        public async Task UpdatePassengerAsync(int id, PassengerSaveRequest request)
+        public async Task<bool> UpdatePassengerAsync(int idPassenger, PassengerSaveRequest request)
         {
-            var entity = await _passengerRepositoryBase.GetByIdAsync(id);
+            var entity = await _passengerRepositoryBase.GetByIdAsync(idPassenger);
 
-            entity.FullName = request.FullName;
-            entity.StudentDNI = request.StundentDNI;
-            entity.StudentAdress = request.StudentAdress;
-            await _passengerRepositoryBase.UpdateAsync(entity);
+            if (entity == null) 
+            { 
+                return false;
+            }
+            var entityUpdated = _passengerMapping.FromEntityToEntityUpdated(entity, request);
+
+            await _passengerRepositoryBase.UpdateAsync(entityUpdated);
+
+            return true;
         }
 
         public async Task DeletePassengerAsync(int id)

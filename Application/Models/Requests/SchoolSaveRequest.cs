@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Application.Models.Requests
 {
-    public class ClientSaveRequest
+    public class SchoolSaveRequest
     {
         public string Name { get; set; }
-        public string Password { get; set; }
-
     }
 }

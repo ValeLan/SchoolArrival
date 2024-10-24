@@ -17,9 +17,9 @@ namespace SchoolArrival.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
-            var entitys = _services.GetAll();
+            var entitys = await _services.GetAllAsync();
             if (entitys.Count == 0)
             {
                 return NotFound();
@@ -55,18 +55,23 @@ namespace SchoolArrival.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("{idPassenger}")]
 
-        public async Task<IActionResult> UpdateAsync([FromQuery] int id, PassengerSaveRequest request)
+        public async Task<IActionResult> UpdateAsync([FromRoute] int idPassenger, [FromBody] PassengerSaveRequest request)
         {
             try
             {
-                await _services.UpdatePassengerAsync(id, request);
-                return Ok();
+
+                bool response = await _services.UpdatePassengerAsync(idPassenger, request);
+                if (response == false)
+                {
+                    return NotFound("No se encontro el pasajero.");
+                }
+                return NoContent();
             }
             catch (Exception)
             {
-                return NotFound();
+                return BadRequest();
             }
         }
 

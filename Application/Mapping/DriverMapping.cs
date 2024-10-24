@@ -17,7 +17,7 @@ namespace Application.Mapping
             var dto = new DriverDto
             {
                 Id = driver.Id,
-                Name = driver.Name,
+                FullName = driver.FullName,
                 Travels = driver.Travels.Select(t => travelMapping.FromEntityToResponse(t)).ToList(),
             };
 
@@ -28,7 +28,7 @@ namespace Application.Mapping
         {
             var driver = new Driver
             {
-                Name = dto.Name,
+                FullName = dto.FullName,
                 Password = dto.Password,
             };
 

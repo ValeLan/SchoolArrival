@@ -14,11 +14,11 @@ namespace Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public TravelState State {  get; set; }
-        public string StudentAdress { get; set; } = string.Empty;
-        public int DriverId { get; set; }
-        public Driver Driver { get; set; }
-        public List<Passenger> Passengers { get; set; } = new List<Passenger>();
+        public TravelState? State {  get; set; }
+        public string? StudentAdress { get; set; }
+        public int? DriverId { get; set; }
+        public Driver? Driver { get; set; }
+        public List<Passenger> Passenger { get; set; } = new List<Passenger>();
 
     }
 }

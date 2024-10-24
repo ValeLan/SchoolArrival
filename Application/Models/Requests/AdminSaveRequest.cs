@@ -10,7 +10,6 @@ namespace Application.Models.Requests
     {
         public string Name { get; set; } = string.Empty;
         public string Password {  get; set; } = string.Empty;
-        public List<int> DistrictsIds { get; set; } = new List<int>();
-        public List<int> SchoolsIds { get; set; } = new List<int>();
+
     }
 }

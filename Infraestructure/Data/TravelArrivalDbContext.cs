@@ -1,5 +1,7 @@
 ﻿using Domain.Entities;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace Infraestructure.Data
 {
@@ -9,14 +11,15 @@ namespace Infraestructure.Data
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Passenger> Passengers { get; set; }
         public DbSet<Travel> Travels { get; set; }
-        public DbSet<Client> Clients { get; set; }
-        public DbSet<District> Districts { get; set; }
         public DbSet<School> Schools { get; set; }
         public TravelArrivalDbContext(DbContextOptions<TravelArrivalDbContext> options) : base(options)
         {
 
         }
-
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<District>().HasData(DistrictDataSeed());
+        //}
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -24,6 +27,34 @@ namespace Infraestructure.Data
                 optionsBuilder.UseSqlite("Data Source=SchoolArrival.db", b => b.MigrationsAssembly("Infraestructure"));
             }
         }
+
+        //private District[] DistrictDataSeed()
+        //{
+        //    District[] district;
+        //    district = [
+        //        new District{
+        //        Id = 1,
+        //        Name = "Zona Norte",
+        //        Passengers = []
+        //        },
+        //        new District{
+        //        Id = 2,
+        //        Name = "Zona Oeste",
+        //        Passengers = []
+        //        },
+        //        new District{
+        //        Id = 3,
+        //        Name = "Zona Sur",
+        //        Passengers = []
+        //        },
+        //        new District{
+        //        Id = 4,
+        //        Name = "Zona Este",
+        //        Passengers = []
+        //        }
+        //        ];
+        //    return district;
+        //}
     }
 
 }
