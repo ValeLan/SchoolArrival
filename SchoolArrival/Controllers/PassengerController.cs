@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models.Requests;
 using Application.Services;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SchoolArrival.Controllers
@@ -18,37 +19,70 @@ namespace SchoolArrival.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(_services.GetAll());
+            var entitys = _services.GetAll();
+            if (entitys.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(entitys);
         }
 
         [HttpGet("{id}")]
 
-        public IActionResult Get([FromRoute] int id)
+        public async Task<IActionResult> GetAsync([FromRoute] int id)
         {
-            return Ok(_services.GetById(id));
+            var entity = await _services.GetAsync(id);
+
+            if (entity is not null)
+            {
+                return Ok(entity);                
+            }
+            return NotFound();
         }
 
         [HttpPost]
 
-        public IActionResult Create([FromBody] PassengerSaveRequest request) 
+        public async Task<IActionResult> CreateAsync([FromBody] PassengerSaveRequest request) 
         {
-            _services.CreatePassenger(request);
-            return Ok();
+            try
+            {
+                await _services.CreateAsync(request);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPut]
 
-        public IActionResult Update([FromQuery] int id, PassengerSaveRequest request)
+        public async Task<IActionResult> UpdateAsync([FromQuery] int id, PassengerSaveRequest request)
         {
-            _services.UpdatePassenger(id, request);
-            return Ok();
+            try
+            {
+                await _services.UpdatePassengerAsync(id, request);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
         }
 
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            _services.DeletePassenger(id);
-            return Ok();
+            try
+            {
+                await _services.DeletePassengerAsync(id);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+            
         }
 
     }

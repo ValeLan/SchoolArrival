@@ -33,11 +33,6 @@ namespace Application.Services
             return responseMapped;
         }
 
-        //public Travel? Get(int id)
-        //{
-        //    return _travelRepository.GetById(id);
-        //}
-
         public async Task<TravelDto> CreateAsync(TravelSaveRequest travel)
         {
             var entity = _travelMapping.FromRequestToEntity(travel);

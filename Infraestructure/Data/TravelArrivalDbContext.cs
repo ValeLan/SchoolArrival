@@ -9,7 +9,7 @@ namespace Infraestructure.Data
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Passenger> Passengers { get; set; }
         public DbSet<Travel> Travels { get; set; }
-
+        public DbSet<Client> Clients { get; set; }
         public DbSet<District> Districts { get; set; }
         public DbSet<School> Schools { get; set; }
         public TravelArrivalDbContext(DbContextOptions<TravelArrivalDbContext> options) : base(options)

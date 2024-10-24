@@ -19,7 +19,12 @@ namespace SchoolArrival.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(_driverServices.GetAll());
+            var drivers = _driverServices.GetAll();
+            if (drivers.Count == 0)
+            {
+                return NotFound();
+            }
+            return Ok(drivers);
         }
 
         //[HttpGet("{id}")]

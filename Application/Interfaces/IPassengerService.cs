@@ -11,10 +11,10 @@ namespace Application.Interfaces
     public interface IPassengerService
     {
         List<PassengerDto> GetAll();
-        PassengerDto? GetById(int id);
-        PassengerDto CreatePassenger(PassengerSaveRequest dto);
-        void UpdatePassenger(int id, PassengerSaveRequest adminDto);
-        void DeletePassenger(int id);
+        Task<PassengerDto> GetAsync(int id);
+        Task CreateAsync( PassengerSaveRequest request);
 
+        Task UpdatePassengerAsync(int id, PassengerSaveRequest request);
+        Task DeletePassengerAsync(int id);
     }
 }
