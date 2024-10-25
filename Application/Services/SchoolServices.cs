@@ -39,10 +39,20 @@ namespace Application.Services
             return _schoolMapping.FromEntityToResponse(response);
         }
 
-        //public void UpdateSchool(int id, School newSchool)
-        //{
-        //    _repository.UpdateEntity(id, newSchool);
-        //}
+        public async Task<bool> UpdateSchoolAsync(int idSchool, SchoolSaveRequest request)
+        {
+            var entity = await _schoolRepositoryBase.GetByIdAsync(idSchool);
+
+            if (entity == null)
+            {
+                return false;
+            }
+            var entityUpdated = _schoolMapping.FromEntityToEntityUpdated(entity, request);
+
+            await _schoolRepositoryBase.UpdateAsync(entityUpdated);
+
+            return true;
+        }
 
         //public void DeleteSchool(int id)
         //{

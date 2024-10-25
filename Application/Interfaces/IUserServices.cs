@@ -1,9 +1,10 @@
-﻿//using Domain.Entities;
+﻿using Application.Models.Requests;
+using Domain.Entities;
 
-//namespace Application.Interfaces
-//{
-//    public interface IUserServices
-//    {
-//        User? Authenticate(string username, string password);
-//    }
-//}
+namespace Application.Interfaces
+{
+    public interface IUserServices
+    {
+        Task<bool> CreateUser(UserRequest request);
+    }
+}

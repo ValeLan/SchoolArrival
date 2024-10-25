@@ -1,5 +1,4 @@
-﻿using Domain.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
@@ -9,11 +8,10 @@ namespace Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public TravelState? State {  get; set; }
-        public string? StudentAdress { get; set; }
-        public int? DriverId { get; set; }
-        public Driver? Driver { get; set; }
-        public List<Passenger> Passenger { get; set; } = new List<Passenger>();
+        public string? Hour { get; set; }
+        public int SchoolId { get; set; }
+        public School? School { get; set; }
+        public List<Passenger> Passengers { get; set; } = new List<Passenger>();
 
     }
 }

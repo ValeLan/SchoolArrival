@@ -13,5 +13,6 @@ namespace Application.Interfaces
     {
         Task<List<SchoolDto>> GetAllAsync();
         Task<SchoolDto> CreateSchoolAsync(SchoolSaveRequest school);
+        Task<bool> UpdateSchoolAsync(int idSchool, SchoolSaveRequest request);
     }
 }

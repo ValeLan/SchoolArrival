@@ -7,6 +7,7 @@ using Domain.Entities;
 using Domain.Interfaces;
 using Domain.Models;
 using Infraestructure.Data;
+using Infraestructure.Services;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -58,29 +59,34 @@ builder.Services.AddAuthentication("Bearer") //"Bearer" es el tipo de auntentica
 );
 
 builder.Services.AddScoped<IAdminServices, AdminServices>();
+builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IDriverServices, DriverServices>();
 builder.Services.AddScoped<IDriverRepository, DriverRepository>();
 builder.Services.AddScoped<ITravelServices, TravelServices>();
 builder.Services.AddScoped<IPassengerRepository, PassengerRepository>();
 builder.Services.AddScoped<IPassengerService, PassengerServices>();
 builder.Services.AddScoped<ISchoolServices, SchoolServices>();
+builder.Services.AddScoped<ICustomAuthenticationServices, AuthenticationServices>();
 builder.Services.AddScoped<IRepositoryBase<School>, EfRepository<School>>();
 builder.Services.AddScoped<IRepositoryBase<Travel>, EfRepository<Travel>>();
 builder.Services.AddScoped<IRepositoryBase<Driver>, EfRepository<Driver>>();
 builder.Services.AddScoped<IRepositoryBase<Passenger>, EfRepository<Passenger>>();
 builder.Services.AddScoped<IRepositoryBase<Admin>, EfRepository<Admin>>();
+builder.Services.AddScoped<IRepositoryBase<User>, EfRepository<User>>();
 //
-//builder.Services.AddScoped<IUserServices, UserServices>();
-//builder.Services.AddScoped<IUserRepository, UserRepository>();
-
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 //
 builder.Services.AddScoped<DriverMapping>();
 builder.Services.AddScoped<TravelMapping>();
 builder.Services.AddScoped<PassengerMapping>();
 builder.Services.AddScoped<SchoolMapping>();
 builder.Services.AddScoped<AdminMapping>();
+builder.Services.AddScoped<UserMapping>();
 
 builder.Services.AddDbContext<TravelArrivalDbContext>(options => options.UseSqlite(builder.Configuration["ConnectionStrings:SchoolArrivalDBConnectionString"]));
+
+builder.Services.Configure<AuthenticationServiceOptions>(
+    builder.Configuration.GetSection(AuthenticationServiceOptions.Authentication));
 
 var app = builder.Build();
 

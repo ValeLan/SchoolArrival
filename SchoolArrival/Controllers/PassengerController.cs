@@ -2,12 +2,14 @@
 using Application.Models.Requests;
 using Application.Services;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SchoolArrival.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PassengerController : Controller
     {
         private readonly IPassengerService _services;

@@ -40,12 +40,25 @@ namespace SchoolArrival.Controllers
             return Ok(response);
         }
 
-        //[HttpPut]
-        //public IActionResult UpdateSchool([FromQuery] int id, School request)
-        //{
-        //    _services.UpdateSchool(id, request);
-        //    return Ok();
-        //}
+        [HttpPut("{idSchool}")]
+
+        public async Task<IActionResult> UpdateAsync([FromRoute] int idSchool, [FromBody] SchoolSaveRequest request)
+        {
+            try
+            {
+
+                bool response = await _schoolServices.UpdateSchoolAsync(idSchool, request);
+                if (response == false)
+                {
+                    return NotFound("No se encontro la escuela.");
+                }
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
 
 
         //[HttpDelete("{id}")]

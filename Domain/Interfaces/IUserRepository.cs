@@ -1,9 +1,9 @@
-﻿//using Domain.Entities;
+﻿using Domain.Entities;
 
-//namespace Domain.Interfaces
-//{
-//    public interface IUserRepository
-//    {
-//        User? Authenticate(string username, string password);
-//    }
-//}
+namespace Domain.Interfaces
+{
+    public interface IUserRepository
+    {
+        Task<User?> GetUserByUserEmail(string email);
+    }
+}

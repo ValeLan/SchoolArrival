@@ -51,12 +51,25 @@ namespace SchoolArrival.Controllers
             
         }
 
-        //[HttpPut]
-        //public IActionResult UpdateAdmin([FromQuery] int id, AdminSaveRequest request)
-        //{
-        //    _AdminServices.UpdateAdmin(id, request);
-        //    return Ok();
-        //}
+        [HttpPut("{idAdmin}")]
+
+        public async Task<IActionResult> UpdateAsync([FromRoute] int idAdmin, [FromBody] AdminSaveRequest request)
+        {
+            try
+            {
+
+                bool response = await _adminServices.UpdateAdminAsync(idAdmin, request);
+                if (response == false)
+                {
+                    return NotFound("No se encontro el admin.");
+                }
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
 
         //[HttpDelete]
         //public IActionResult DeleteAdmin(int id)

@@ -1,14 +1,15 @@
 ﻿using Application.Interfaces;
-using Application.Models.Dtos;
 using Application.Models.Requests;
-using Domain.Entities;
-using Microsoft.AspNetCore.Http;
+using Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace SchoolArrival.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TravelController : ControllerBase
     {
         private readonly ITravelServices _travelServices;
@@ -29,10 +30,22 @@ namespace SchoolArrival.Controllers
         //    return Ok(_travelServices.Get(id));
         //}
 
+        //[HttpPost]
+        //public async Task<IActionResult> CreateAsync([FromBody]TravelSaveRequest travel)
+        //{
+        //    return Ok(await _travelServices.CreateAsync(travel));
+        //}
+
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody]TravelSaveRequest travel)
+        public async Task<IActionResult> CreateTravel(TravelSaveRequest request)
         {
-            return Ok(await _travelServices.CreateAsync(travel));
+            var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            if (userRoleClaim == Role.Passenger.ToString())
+            {
+                return Forbid("El pasajero no esta autorizado para crear viajes.");
+            }
+            await _travelServices.CreateAsync(request);
+            return Ok();
         }
 
         //[HttpPut]

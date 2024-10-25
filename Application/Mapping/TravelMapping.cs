@@ -2,11 +2,6 @@
 using Application.Models.Requests;
 using Domain.Entities;
 using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Mapping
 {
@@ -16,20 +11,22 @@ namespace Application.Mapping
         {
             var travel = new Travel
             {
-                State = TravelState.Llegando,
-                StudentAdress = dto.StudentAdress,
-                DriverId = dto.DriverId,
+                Hour = dto.Hour,
+                SchoolId = dto.SchoolId,
             };
             return travel;
         }
 
         public TravelDto FromEntityToResponse(Travel travel)
         {
+            var _userMapping = new UserMapping();
+            var _schoolMapping = new SchoolMapping();
             var dto = new TravelDto
             {
                 Id = travel.Id,
-                State = travel.State.ToString(),
-                StudentAdress = travel.StudentAdress
+                Hour = travel.Hour,
+                SchoolDto = _schoolMapping.FromEntityToResponse(travel.School),
+                Passengers = travel.Passengers.Select(p => _userMapping.FromEntityToResponse(p)).ToList()
 
             };
             return dto;

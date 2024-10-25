@@ -22,5 +22,7 @@ namespace Infraestructure.Data
             Passenger? userToAuthenticate = _context.Passengers.FirstOrDefault(u => u.FullName == username && u.Password == password);
             return userToAuthenticate;
         }
+
+        
     }
 }

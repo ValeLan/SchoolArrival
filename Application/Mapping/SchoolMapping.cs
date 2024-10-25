@@ -1,23 +1,17 @@
 ﻿using Application.Models.Dtos;
 using Application.Models.Requests;
 using Domain.Entities;
-using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Mapping
 {
     public class SchoolMapping
     {
-        PassengerMapping passengersMapped = new PassengerMapping();
         public School FromRequestToEntity(SchoolSaveRequest dto)
         {
             var school = new School
             {
-                Name = dto.Name
+                Name = dto.Name,
+                SchoolAdress = dto.SchoolAdress,
             };
             return school;
         }
@@ -28,10 +22,17 @@ namespace Application.Mapping
             {
                 Id = school.Id,
                 Name = school.Name,
-                Passengers = school.Passengers.Select(e => passengersMapped.FromEntityToResponse(e)).ToList()
+                SchoolAdress = school.SchoolAdress,
 
             };
             return dto;
         }
+
+        //public School FromEntityToEntityUpdated(School school, SchoolSaveRequest schoolRequest)
+        //{
+        //    school.Name = schoolRequest.Name ?? school.Name;
+
+        //    return school;
+        //}
     }
 }
