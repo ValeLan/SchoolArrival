@@ -1,7 +1,5 @@
 ﻿using Application.Interfaces;
 using Application.Models.Requests;
-using Application.Services;
-using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SchoolArrival.Controllers
@@ -26,12 +24,6 @@ namespace SchoolArrival.Controllers
             }
             return Ok(school);
         }
-
-        //[HttpGet("{id}")]
-        //public IActionResult Get([FromRoute] int id)
-        //{
-        //    return Ok(_services.GetById(id));
-        //}
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync(SchoolSaveRequest request)
@@ -61,11 +53,11 @@ namespace SchoolArrival.Controllers
         }
 
 
-        //[HttpDelete("{id}")]
-        //public IActionResult DeleteSchool([FromRoute] int id)
-        //{
-        //    _services.DeleteSchool(id);
-        //    return Ok();
-        //}
+        [HttpDelete("{idSchool}")]
+        public async Task<IActionResult> DeleteSchool([FromRoute] int idSchool)
+        {
+            await _schoolServices.DeleteAsync(idSchool);
+            return Ok();
+        }
     }
 }

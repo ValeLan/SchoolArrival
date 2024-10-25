@@ -31,5 +31,13 @@ namespace Application.Mapping
             };
             return dto;
         }
+
+        public Travel FromEntityToEntityUpdated(Travel travel, TravelSaveRequest travelRequest)
+        {
+            travel.Hour = travelRequest.Hour ?? travel.Hour;
+            travel.SchoolId = travelRequest.SchoolId; //no se puede usar el operador ?? con int y int
+
+            return travel;
+        }
     }
 }

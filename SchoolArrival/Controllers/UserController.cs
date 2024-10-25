@@ -1,5 +1,4 @@
 ﻿using Application.Interfaces;
-using Application.Models.Dtos;
 using Application.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,6 +35,25 @@ namespace SchoolArrival.Controllers
         {
             var response = await _userServices.CreateUser(request);
             return Ok(response);
+        }
+
+        [HttpPut("{idUser}")]
+        public async Task<IActionResult> UpdateAsync([FromRoute] int idUser, [FromBody] UserRequest request)
+        {
+            try
+            {
+
+                bool response = await _userServices.UpdateUserAsync(idUser, request);
+                if (response == false)
+                {
+                    return NotFound("No se encontro el usuario.");
+                }
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpDelete]

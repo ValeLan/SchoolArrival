@@ -54,9 +54,10 @@ namespace Application.Services
             return true;
         }
 
-        public void DeleteSchool(int id)
+        public async Task DeleteAsync(int idSchool)
         {
- //           _schoolRepositoryBase.Remove(id);
+            var response = await _schoolRepositoryBase.GetByIdAsync(idSchool);
+            await _schoolRepositoryBase.DeleteAsync(response);
         }
     }
 }

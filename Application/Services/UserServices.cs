@@ -4,7 +4,6 @@ using Application.Models.Dtos;
 using Application.Models.Requests;
 using ConsultaAlumnos.Domain.Interfaces;
 using Domain.Entities;
-using Domain.Interfaces;
 
 namespace Application.Services
 {
@@ -37,6 +36,21 @@ namespace Application.Services
         {
             var entity = _userMapping.FromRequestToEntity(request);
             await _userRepositoryBase.AddAsync(entity);
+            return true;
+        }
+
+        public async Task<bool> UpdateUserAsync(int idUser, UserRequest request)
+        {
+            var entity = await _userRepositoryBase.GetByIdAsync(idUser);
+
+            if (entity == null)
+            {
+                return false;
+            }
+            var entityUpdated = _userMapping.FromEntityToEntityUpdated(entity, request);
+
+            await _userRepositoryBase.UpdateAsync(entityUpdated);
+
             return true;
         }
 

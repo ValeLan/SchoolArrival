@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models.Requests;
+using Application.Services;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -48,17 +49,44 @@ namespace SchoolArrival.Controllers
             return Ok();
         }
 
-        //[HttpPut]
-        //public IActionResult Update([FromQuery] int id, TravelSaveRequest travel) 
-        //{
-        //    _travelServices.UpdateEntity(id, travel);
-        //    return Ok();
-        //}
+        [HttpPut("{idTravel}")]
+        public async Task<IActionResult> UpdateAsync([FromRoute] int idTravel, [FromBody] TravelSaveRequest request)
+        {
+            try
+            {
 
-        //[HttpDelete]
-        //public IActionResult Delete(int id) 
-        //{
-        //    return Ok(_travelServices.Delete(id));
-        //}
+                bool response = await _travelServices.UpdateTravelAsync(idTravel, request);
+                if (response == false)
+                {
+                    return NotFound("No se encontro el viaje.");
+                }
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser(int idTravel)
+        {
+            var response = await _travelServices.GetAsync(idTravel);
+
+            try
+            {
+                if (response == null)
+                {
+                    return NotFound();
+                }
+                await _travelServices.DeleteAsync(response.Id);
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

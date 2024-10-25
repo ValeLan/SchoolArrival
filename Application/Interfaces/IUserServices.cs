@@ -10,5 +10,6 @@ namespace Application.Interfaces
         Task<List<UserDto>> GetAllAsync();
         Task<UserDto> GetAsync(int idUser);
         Task DeleteAsync(int idUser);
+        Task<bool> UpdateUserAsync(int idUser, UserRequest request);
     }
 }
