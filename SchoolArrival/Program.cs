@@ -58,9 +58,9 @@ builder.Services.AddAuthentication("Bearer") //"Bearer" es el tipo de auntentica
     }
 );
 
-builder.Services.AddScoped<IAdminServices, AdminServices>();
+
 builder.Services.AddScoped<IUserServices, UserServices>();
-builder.Services.AddScoped<IDriverServices, DriverServices>();
+
 builder.Services.AddScoped<IDriverRepository, DriverRepository>();
 builder.Services.AddScoped<ITravelServices, TravelServices>();
 builder.Services.AddScoped<IPassengerRepository, PassengerRepository>();
@@ -76,11 +76,8 @@ builder.Services.AddScoped<IRepositoryBase<User>, EfRepository<User>>();
 //
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 //
-builder.Services.AddScoped<DriverMapping>();
 builder.Services.AddScoped<TravelMapping>();
-builder.Services.AddScoped<PassengerMapping>();
 builder.Services.AddScoped<SchoolMapping>();
-builder.Services.AddScoped<AdminMapping>();
 builder.Services.AddScoped<UserMapping>();
 
 builder.Services.AddDbContext<TravelArrivalDbContext>(options => options.UseSqlite(builder.Configuration["ConnectionStrings:SchoolArrivalDBConnectionString"]));

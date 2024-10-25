@@ -28,11 +28,12 @@ namespace Application.Mapping
             return dto;
         }
 
-        //public School FromEntityToEntityUpdated(School school, SchoolSaveRequest schoolRequest)
-        //{
-        //    school.Name = schoolRequest.Name ?? school.Name;
+        public School FromEntityToEntityUpdated(School school, SchoolSaveRequest schoolRequest)
+        {
+            school.Name = schoolRequest.Name ?? school.Name;
+            school.SchoolAdress = schoolRequest.SchoolAdress;
 
-        //    return school;
-        //}
+            return school;
+        }
     }
 }
