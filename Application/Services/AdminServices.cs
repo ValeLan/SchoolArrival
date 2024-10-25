@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Mapping;
 using Application.Models.Dtos;
 using Application.Models.Requests;
 using ConsultaAlumnos.Domain.Interfaces;
@@ -16,15 +17,19 @@ namespace Application.Services
     public class AdminServices : IAdminServices
     {
         private readonly IRepositoryBase<Admin> _adminRepositoryBase;
-        public AdminServices(IRepositoryBase<Admin> adminRepositoryBase)
+        private readonly AdminMapping _adminMapping;
+        public AdminServices(IRepositoryBase<Admin> adminRepositoryBase, AdminMapping adminMapping)
         {
             _adminRepositoryBase = adminRepositoryBase;
+            _adminMapping = adminMapping;
         }
 
-        //public List<AdminDto> GetAll()
-        //{
-        //    return _adminRepository.GetAll();
-        //}
+        public async Task<List<AdminDto>> GetAllAsync()
+        {
+            var response = await _adminRepositoryBase.ListAsync();
+            return response.Select(e => _adminMapping.FromEntityToResponse(e)).ToList();
+
+        }
 
         //public AdminDto? GetById(int id)
         //{
@@ -33,18 +38,17 @@ namespace Application.Services
         //    {
         //        return null;
         //    }
-
         //    return AdminDto.ToDto(admin);
         //}
 
-        //public AdminDto CreateAdmin(AdminSaveRequest adminDto)
-        //{
-        //    var entity = AdminDto.ToEntity(adminDto);
-        //    entity.Districts = _districtRepository.GetByIds(adminDto.DistrictsIds);
-        //    entity.Schools = _schoolRepository.GetByIds(adminDto.SchoolsIds);
-        //    _adminRepository.Add(entity);
-        //    return AdminDto.ToDto(entity);
-        //}
+        public async Task<AdminDto> CreateAdminAsync(AdminSaveRequest adminDto)
+        {
+            var entity = _adminMapping.FromRequestToEntity(adminDto);
+            var response = await _adminRepositoryBase.AddAsync(entity);
+
+            return _adminMapping.FromEntityToResponse(response);
+
+        }
 
         //public void UpdateAdmin(int id, AdminSaveRequest adminDto)
         //{

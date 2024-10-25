@@ -11,7 +11,8 @@ namespace Application.Interfaces
 {
     public interface IAdminServices
     {
-
+        Task<List<AdminDto>> GetAllAsync();
+        Task<AdminDto> CreateAdminAsync(AdminSaveRequest adminDto);
 
     }
 }
