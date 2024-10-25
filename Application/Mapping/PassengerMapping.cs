@@ -8,8 +8,10 @@ namespace Application.Mapping
         {
             var passenger = new Passenger()
             {
+                Id = user.Id,
                 Email = user.Email,
                 FullName = user.FullName,
+
             };
             return passenger;
         }

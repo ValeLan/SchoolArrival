@@ -59,7 +59,6 @@ namespace SchoolArrival.Controllers
             }
         }
 
-        [Authorize(Policy = "0")]
         [HttpDelete]
         public async Task<IActionResult> DeleteUser(int idUser)
         {
