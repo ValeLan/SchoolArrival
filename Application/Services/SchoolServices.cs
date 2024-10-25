@@ -54,9 +54,9 @@ namespace Application.Services
             return true;
         }
 
-        //public void DeleteSchool(int id)
-        //{
-        //    _repository.Remove(id);
-        //}
+        public void DeleteSchool(int id)
+        {
+ //           _schoolRepositoryBase.Remove(id);
+        }
     }
 }

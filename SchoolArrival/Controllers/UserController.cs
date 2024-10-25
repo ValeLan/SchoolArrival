@@ -13,7 +13,7 @@ namespace SchoolArrival.Controllers
         public UserController(IUserServices userServices)
         {
             _userServices = userServices;
-        }
+        }        
 
         [HttpPost]
         public async Task<IActionResult> CreateUser(UserRequest request)

@@ -1,5 +1,8 @@
-﻿using Application.Models.Requests;
+﻿using Application.Models.Dtos;
+using Application.Models.Requests;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System.Diagnostics;
 
 namespace Application.Mapping
 {
@@ -17,5 +20,22 @@ namespace Application.Mapping
 
             return user;
         }
+
+        public UserDto FromEntityToResponse(User dto) 
+        {
+            var request = new UserDto
+            {
+                Id = dto.Id,
+                FullName = dto.FullName,
+                Email = dto.Email,
+                PhoneNumber = dto.PhoneNumber,
+                DNI = dto.DNI,
+                Role = dto.Role.ToString(),
+                District = dto.District.ToString(),
+                
+            };
+            return request;
+        }
+
     }
 }
