@@ -40,7 +40,7 @@ namespace Application.Mapping
             user.FullName = userRequest.FullName ?? user.FullName;
             user.Password = userRequest.Password ?? user.Password;
             user.Email = userRequest.Email ?? user.Email;
-            user.Role = userRequest.Role; //no me deja poner ToString() por ser enum.
+            user.Role = userRequest.Role;
 
             return user;
         }

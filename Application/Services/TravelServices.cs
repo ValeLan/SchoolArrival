@@ -2,7 +2,7 @@
 using Application.Mapping;
 using Application.Models.Dtos;
 using Application.Models.Requests;
-using ConsultaAlumnos.Domain.Interfaces;
+using SchoolArrival.Domain.Interfaces;
 using Domain.Entities;
 
 namespace Application.Services
@@ -10,17 +10,19 @@ namespace Application.Services
     public class TravelServices : ITravelServices
     {
         private readonly IRepositoryBase<Travel> _travelRepositoryBase;
+        private readonly ITravelRepository _travelRepository;
         private readonly TravelMapping _travelMapping;
 
-        public TravelServices(IRepositoryBase<Travel> travelRepositoryBase, TravelMapping TravelMapping)
+        public TravelServices(IRepositoryBase<Travel> travelRepositoryBase, TravelMapping TravelMapping, ITravelRepository travelRepository)
         {
             _travelMapping = TravelMapping;
             _travelRepositoryBase = travelRepositoryBase;
+            _travelRepository = travelRepository;
         }
 
         public async Task<List<TravelDto>> GetAllAsync()
         {
-            var response = await _travelRepositoryBase.ListAsync();
+            var response = await _travelRepository.GetAll();
             var responseMapped = response.Select(e => _travelMapping.FromEntityToResponse(e)).ToList();
             return responseMapped;
         }
@@ -38,7 +40,7 @@ namespace Application.Services
             var response = await _travelRepositoryBase.AddAsync(entity);
             var responseMapped = _travelMapping.FromEntityToResponse(response);
             
-            return  responseMapped;
+            return  responseMapped; 
         }
 
 

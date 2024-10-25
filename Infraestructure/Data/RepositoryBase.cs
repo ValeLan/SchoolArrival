@@ -1,6 +1,6 @@
 ﻿using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using ConsultaAlumnos.Domain.Interfaces;
+using SchoolArrival.Domain.Interfaces;
 
 namespace SchoolArrival.Infrastructure.Data;
 

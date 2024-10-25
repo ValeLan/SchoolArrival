@@ -1,96 +1,42 @@
 ﻿using Application.Interfaces;
-using Application.Models.Requests;
-using Application.Services;
-using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace SchoolArrival.Controllers
 {
-    //[Route("api/[controller]")]
-    //[ApiController]
-    //[Authorize]
-    //public class PassengerController : Controller
-    //{
-    //    private readonly IPassengerService _services;
-    //    public PassengerController(IPassengerService services)
-    //    {
-    //        _services = services;
-    //    }
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
+    public class PassengerController : ControllerBase
+    {
+        private readonly IPassengerService _passengerService;
 
-    //    [HttpGet]
-    //    public async Task<IActionResult> GetAllAsync()
-    //    {
-    //        var entitys = await _services.GetAllAsync();
-    //        if (entitys.Count == 0)
-    //        {
-    //            return NotFound();
-    //        }
-    //        return Ok(entitys);
-    //    }
+        public PassengerController(IPassengerService passengerService)
+        {
+            _passengerService = passengerService;
+        }
 
-        //[HttpGet("{id}")]
-
-        //public async Task<IActionResult> GetAsync([FromRoute] int id)
-        //{
-        //    var entity = await _services.GetAsync(id);
-
-        //    if (entity is not null)
-        //    {
-        //        return Ok(entity);                
-        //    }
-        //    return NotFound();
-        //}
-
-        //[HttpPost]
-
-        //public async Task<IActionResult> CreateAsync([FromBody] PassengerSaveRequest request)
-        //{
-        //    try
-        //    {
-        //        await _services.CreateAsync(request);
-        //        return Ok();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
-
-        //[HttpPut("{idPassenger}")]
-
-        //public async Task<IActionResult> UpdateAsync([FromRoute] int idPassenger, [FromBody] PassengerSaveRequest request)
-        //{
-        //    try
-        //    {
-
-        //        bool response = await _services.UpdatePassengerAsync(idPassenger, request);
-        //        if (response == false)
-        //        {
-        //            return NotFound("No se encontro el pasajero.");
-        //        }
-        //        return NoContent();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
-
-        //[HttpDelete]
-        //public async Task<IActionResult> DeleteAsync(int id)
-        //{
-        //    try
-        //    {
-        //        await _services.DeletePassengerAsync(id);
-        //        return Ok();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //}
-
-    
+        [HttpPost]
+        public async Task<IActionResult> SignToTravel(int idTravel)
+        {
+            var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            if (userRoleClaim != Role.Passenger.ToString())
+            {
+                return Forbid("El usuario no esta autorizado para anotarse en el viaje.");
+            }
+            try
+            {
+                var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                await _passengerService.SignToTravel(int.Parse(userIdClaim), idTravel);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+    }
 }

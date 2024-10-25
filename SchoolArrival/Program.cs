@@ -1,9 +1,10 @@
 using Application.Interfaces;
 using Application.Mapping;
 using Application.Services;
-using ConsultaAlumnos.Domain.Interfaces;
-using ConsultaAlumnos.Infrastructure.Data;
+using SchoolArrival.Domain.Interfaces;
+using SchoolArrival.Infrastructure.Data;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Interfaces;
 using Domain.Models;
 using Infraestructure.Data;
@@ -58,9 +59,16 @@ builder.Services.AddAuthentication("Bearer") //"Bearer" es el tipo de auntentica
     }
 );
 
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("Admin", policy => policy.RequireClaim("role", Role.Admin));
+//    options.AddPolicy("Passenger", policy => policy.RequireClaim("role", Role.Passenger));
+//    options.AddPolicy("Driver", policy => policy.RequireClaim("role", Role.Driver));
+//});
+
 
 builder.Services.AddScoped<IUserServices, UserServices>();
-
+builder.Services.AddScoped<ITravelRepository, TravelRepository>();
 builder.Services.AddScoped<IDriverRepository, DriverRepository>();
 builder.Services.AddScoped<ITravelServices, TravelServices>();
 builder.Services.AddScoped<IPassengerRepository, PassengerRepository>();

@@ -35,7 +35,7 @@ namespace Application.Mapping
         public Travel FromEntityToEntityUpdated(Travel travel, TravelSaveRequest travelRequest)
         {
             travel.Hour = travelRequest.Hour ?? travel.Hour;
-            travel.SchoolId = travelRequest.SchoolId; //no se puede usar el operador ?? con int y int
+            travel.SchoolId = travelRequest.SchoolId;
 
             return travel;
         }

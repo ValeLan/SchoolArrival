@@ -31,7 +31,7 @@ namespace Application.Mapping
         public School FromEntityToEntityUpdated(School school, SchoolSaveRequest schoolRequest)
         {
             school.Name = schoolRequest.Name ?? school.Name;
-            school.SchoolAdress = schoolRequest.SchoolAdress;
+            school.SchoolAdress = schoolRequest.SchoolAdress ?? school.SchoolAdress;
 
             return school;
         }

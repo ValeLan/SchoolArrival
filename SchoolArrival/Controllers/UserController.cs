@@ -1,6 +1,9 @@
 ﻿using Application.Interfaces;
 using Application.Models.Requests;
+using Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace SchoolArrival.Controllers
 {
@@ -56,6 +59,7 @@ namespace SchoolArrival.Controllers
             }
         }
 
+        [Authorize(Policy = "0")]
         [HttpDelete]
         public async Task<IActionResult> DeleteUser(int idUser)
         {

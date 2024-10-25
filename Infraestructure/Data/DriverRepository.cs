@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using ConsultaAlumnos.Infrastructure.Data;
+using SchoolArrival.Infrastructure.Data;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 

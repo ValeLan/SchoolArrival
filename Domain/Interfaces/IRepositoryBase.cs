@@ -1,4 +1,4 @@
-﻿namespace ConsultaAlumnos.Domain.Interfaces;
+﻿namespace SchoolArrival.Domain.Interfaces;
 
 public interface IRepositoryBase<T> where T : class
 {

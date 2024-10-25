@@ -1,10 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Mapping;
-using Application.Models.Dtos;
-using Application.Models.Requests;
-using ConsultaAlumnos.Domain.Interfaces;
 using Domain.Entities;
-using Domain.Interfaces;
+using SchoolArrival.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,63 +12,34 @@ namespace Application.Services
 {
     public class PassengerServices : IPassengerService
     {
-        //private readonly IRepositoryBase<Passenger> _passengerRepositoryBase;
-        //private readonly IPassengerRepository _passengerRepository;
-        //private readonly PassengerMapping _passengerMapping;
-        //private readonly IRepositoryBase<Travel> _travelRepositoryBase;
+        private readonly ITravelRepository _travelRepository;
+        private readonly IRepositoryBase<User> _userRepositoryBase;
+        private readonly IRepositoryBase<Travel> _travelRepositoryBase;
 
-        //public PassengerServices(IRepositoryBase<Passenger> passengerRepositoryBase, IPassengerRepository passengerRepository, PassengerMapping passengerMapping, IRepositoryBase<Travel> travelRepositoryBase)
-        //{
-        //    _passengerRepositoryBase = passengerRepositoryBase;
-        //    _passengerRepository = passengerRepository;
-        //    _passengerMapping = passengerMapping;
-        //    _travelRepositoryBase = travelRepositoryBase;
-        //}
+        public PassengerServices(ITravelRepository travelRepository, IRepositoryBase<User> userRepositoryBase, IRepositoryBase<Travel> travelRepositoryBase)
+        {
+            _travelRepository = travelRepository;
+            _userRepositoryBase = userRepositoryBase;
+            _travelRepositoryBase = travelRepositoryBase;
+        }
 
-        //public async Task<List<PassengerDto>> GetAllAsync()
-        //{
-        //    var response = await _passengerRepositoryBase.ListAsync();
-        //    var responseMapped = response.Select(e => _passengerMapping.FromEntityToResponse(e)).ToList();
-        //    return responseMapped;
+        public async Task SignToTravel(int idUser, int idTravel)
+        {
+            var travel = await _travelRepository.GetById(idTravel);
+            if(travel == null)
+            {
+                throw new Exception("El viaje no fue encontrado.");
+            }
+            var user = await _userRepositoryBase.GetByIdAsync(idUser);
+            if (user == null)
+            {
+                throw new Exception("No se encontró el usuario");
+            }
+            var _passengerMapping = new PassengerMapping();
+            var passenger = _passengerMapping.FromUserToPassenger(user);
+            travel.Passengers.Add(passenger);
+            await _travelRepositoryBase.SaveChangesAsync();
 
-        //}
-
-        //public async Task<PassengerDto> GetAsync(int id)
-        //{
-        //    var response = await _passengerRepositoryBase.GetByIdAsync(id);
-        //    var responseMap = _passengerMapping.FromEntityToResponse(response);  
-        //    return responseMap;
-        //}
-        //public async Task CreateAsync(PassengerSaveRequest request)
-        //{
-        //    var entity = _passengerMapping.FromRequestToEntity(request);
-        //    var response = await _passengerRepositoryBase.AddAsync(entity);
-        //}
-
-        //public async Task<bool> UpdatePassengerAsync(int idPassenger, PassengerSaveRequest request)
-        //{
-        //    var entity = await _passengerRepositoryBase.GetByIdAsync(idPassenger);
-
-        //    if (entity == null) 
-        //    { 
-        //        return false;
-        //    }
-        //    var entityUpdated = _passengerMapping.FromEntityToEntityUpdated(entity, request);
-
-        //    await _passengerRepositoryBase.UpdateAsync(entityUpdated);
-
-        //    return true;
-        //}
-
-        //public async Task DeletePassengerAsync(int id)
-        //{
-        //    var entity = await _passengerRepositoryBase.GetByIdAsync(id);
-        //    await _passengerRepositoryBase.DeleteAsync(entity);
-        //}
-
-        //public Passenger? Authenticate(string username, string password)
-        //{
-        //    return _passengerRepository.Authenticate(username, password);
-        //}
+        }
     }
 }

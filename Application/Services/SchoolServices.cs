@@ -2,7 +2,7 @@
 using Application.Mapping;
 using Application.Models.Dtos;
 using Application.Models.Requests;
-using ConsultaAlumnos.Domain.Interfaces;
+using SchoolArrival.Domain.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces;
 using System;

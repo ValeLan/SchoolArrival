@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsultaAlumnos.Infrastructure.Data;
+namespace SchoolArrival.Infrastructure.Data;
 
 public class EfRepository<T> : RepositoryBase<T> where T : class
 {

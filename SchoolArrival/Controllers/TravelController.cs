@@ -40,13 +40,21 @@ namespace SchoolArrival.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTravel(TravelSaveRequest request)
         {
-            var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-            if (userRoleClaim == Role.Passenger.ToString())
+            try
             {
-                return Forbid("El pasajero no esta autorizado para crear viajes.");
+                var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                if (userRoleClaim == Role.Passenger.ToString())
+                {
+                    return Forbid("El pasajero no esta autorizado para crear viajes.");
+                }
+                await _travelServices.CreateAsync(request);
+                return Ok();
             }
-            await _travelServices.CreateAsync(request);
-            return Ok();
+            catch (Exception ex)
+            {
+                return Forbid(ex.Message);
+            }
+            
         }
 
         [HttpPut("{idTravel}")]
@@ -54,6 +62,11 @@ namespace SchoolArrival.Controllers
         {
             try
             {
+                var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                if (userRoleClaim == Role.Passenger.ToString())
+                {
+                    return Forbid("El pasajero no esta autorizado para crear viajes.");
+                }
 
                 bool response = await _travelServices.UpdateTravelAsync(idTravel, request);
                 if (response == false)
@@ -75,6 +88,11 @@ namespace SchoolArrival.Controllers
 
             try
             {
+                var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                if (userRoleClaim == Role.Passenger.ToString())
+                {
+                    return Forbid("El pasajero no esta autorizado para crear viajes.");
+                }
                 if (response == null)
                 {
                     return NotFound();
