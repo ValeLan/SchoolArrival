@@ -11,7 +11,7 @@ namespace Domain.Entities
         public string? Hour { get; set; }
         public int SchoolId { get; set; }
         public School? School { get; set; }
-        public List<Passenger> Passengers { get; set; } = new List<Passenger>();
+        public List<User> Passengers { get; set; } = new List<User>();
 
     }
 }

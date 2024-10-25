@@ -5,7 +5,7 @@ namespace Application.Interfaces
 {
     public interface IPassengerService
     {
-        Task SignToTravel(int idUser, int idTravel);
-        Task DropTravel(int idUser, int idTravel);
+        //Task SignToTravel(int idUser, int idTravel);
+        //Task DropTravel(int idUser, int idTravel);
     }
 }

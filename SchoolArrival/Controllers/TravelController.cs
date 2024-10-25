@@ -25,18 +25,6 @@ namespace SchoolArrival.Controllers
             return Ok(await _travelServices.GetAllAsync());
         }
 
-        //[HttpGet("{id}")]
-        //public IActionResult Get([FromRoute]int id) 
-        //{ 
-        //    return Ok(_travelServices.Get(id));
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> CreateAsync([FromBody]TravelSaveRequest travel)
-        //{
-        //    return Ok(await _travelServices.CreateAsync(travel));
-        //}
-
         [HttpPost]
         public async Task<IActionResult> CreateTravel(TravelSaveRequest request)
         {
@@ -45,7 +33,7 @@ namespace SchoolArrival.Controllers
                 var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
                 if (userRoleClaim == Role.Passenger.ToString())
                 {
-                    return Forbid("El pasajero no esta autorizado para crear viajes.");
+                    return StatusCode(403, "El pasajero no esta autorizado para crear viajes.");
                 }
                 await _travelServices.CreateAsync(request);
                 return Ok();
@@ -65,7 +53,7 @@ namespace SchoolArrival.Controllers
                 var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
                 if (userRoleClaim == Role.Passenger.ToString())
                 {
-                    return Forbid("El pasajero no esta autorizado para crear viajes.");
+                    return StatusCode(403, "El pasajero no esta autorizado para crear viajes.");
                 }
 
                 bool response = await _travelServices.UpdateTravelAsync(idTravel, request);
@@ -91,7 +79,7 @@ namespace SchoolArrival.Controllers
                 var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
                 if (userRoleClaim == Role.Passenger.ToString())
                 {
-                    return Forbid("El pasajero no esta autorizado para crear viajes.");
+                    return StatusCode(403, "El pasajero no esta autorizado para crear viajes.");
                 }
                 if (response == null)
                 {

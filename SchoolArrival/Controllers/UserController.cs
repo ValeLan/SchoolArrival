@@ -9,6 +9,7 @@ namespace SchoolArrival.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserServices _userServices;
@@ -66,9 +67,16 @@ namespace SchoolArrival.Controllers
 
             try
             {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userIdClaim == null  || response.Id != int.Parse(userIdClaim))
+                {
+                    return StatusCode(403, "El usuario no está autorizado para eliminar este usuario.");
+                }
+
                 if (response == null)
                 {
-                    return NotFound();
+                    return NotFound("No se encontro el usuario que desea eliminar.");
                 }
                 await _userServices.DeleteAsync(response.Id);
 

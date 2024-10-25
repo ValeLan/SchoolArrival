@@ -23,50 +23,50 @@ namespace Application.Services
             _travelRepositoryBase = travelRepositoryBase;
         }
 
-        public async Task SignToTravel(int idUser, int idTravel)
-        {
-            var travel = await _travelRepository.GetById(idTravel);
-            if(travel == null)
-            {
-                throw new Exception("El viaje no fue encontrado.");
-            }
-            var user = await _userRepositoryBase.GetByIdAsync(idUser);
-            if (user == null)
-            {
-                throw new Exception("No se encontró el usuario");
-            }
-            var _passengerMapping = new PassengerMapping();
-            var passenger = _passengerMapping.FromUserToPassenger(user);
+        //public async Task SignToTravel(int idUser, int idTravel)
+        //{
+        //    var travel = await _travelRepository.GetById(idTravel);
+        //    if (travel == null)
+        //    {
+        //        throw new Exception("El viaje no fue encontrado.");
+        //    }
+        //    var user = await _userRepositoryBase.GetByIdAsync(idUser);
+        //    if (user == null)
+        //    {
+        //        throw new Exception("No se encontró el usuario");
+        //    }
+        //    var _passengerMapping = new PassengerMapping();
+        //    var passenger = _passengerMapping.FromUserToPassenger(user);
 
-            if(!travel.Passengers.Any(p => p.Id == passenger.Id))
-            {
-                travel.Passengers.Add(passenger);
-                await _travelRepositoryBase.SaveChangesAsync();
-            }
-            
+        //    if (!travel.Passengers.Any(p => p.Id == passenger.Id))
+        //    {
+        //        travel.Passengers.Add(passenger);
+        //        await _travelRepositoryBase.SaveChangesAsync();
+        //    }
 
-        }
 
-        public async Task DropTravel(int idUser, int idTravel)
-        {
-            var travel = await _travelRepository.GetById(idTravel);
-            if (travel == null)
-            {
-                throw new Exception("El viaje no fue encontrado.");
-            }
-            var user = await _userRepositoryBase.GetByIdAsync(idUser);
-            if (user == null)
-            {
-                throw new Exception("No se encontró el usuario");
-            }
-            var _passengerMapping = new PassengerMapping();
-            var passenger = _passengerMapping.FromUserToPassenger(user);
-            var passengerToRemove = travel.Passengers.FirstOrDefault(p => p.Id == passenger.Id);
-            if (passengerToRemove != null)
-            {
-                travel.Passengers.Remove(passengerToRemove);
-                await _travelRepositoryBase.SaveChangesAsync();
-            }
-        }
+        //}
+
+        //public async Task DropTravel(int idUser, int idTravel)
+        //{
+        //    var travel = await _travelRepository.GetById(idTravel);
+        //    if (travel == null)
+        //    {
+        //        throw new Exception("El viaje no fue encontrado.");
+        //    }
+        //    var user = await _userRepositoryBase.GetByIdAsync(idUser);
+        //    if (user == null)
+        //    {
+        //        throw new Exception("No se encontró el usuario");
+        //    }
+        //    var _passengerMapping = new PassengerMapping();
+        //    var passenger = _passengerMapping.FromUserToPassenger(user);
+        //    var passengerToRemove = travel.Passengers.FirstOrDefault(p => p.Id == passenger.Id);
+        //    if (passengerToRemove != null)
+        //    {
+        //        travel.Passengers.Remove(passengerToRemove);
+        //        await _travelRepositoryBase.SaveChangesAsync();
+        //    }
+        //}
     }
 }

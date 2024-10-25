@@ -12,11 +12,11 @@ namespace SchoolArrival.Controllers
     [Authorize]
     public class PassengerController : ControllerBase
     {
-        private readonly IPassengerService _passengerService;
+        private readonly IUserServices _userService;
 
-        public PassengerController(IPassengerService passengerService)
+        public PassengerController(IUserServices userService)
         {
-            _passengerService = passengerService;
+            _userService = userService;
         }
 
         [HttpPost("SignToTravel")]
@@ -25,12 +25,12 @@ namespace SchoolArrival.Controllers
             var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
             if (userRoleClaim != Role.Passenger.ToString())
             {
-                return Forbid("El usuario no esta autorizado para anotarse en el viaje.");
+                return StatusCode(403, "El usuario no esta autorizado para anotarse en el viaje.");
             }
             try
             {
                 var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                await _passengerService.SignToTravel(int.Parse(userIdClaim), idTravel);
+                await _userService.SignToTravel(int.Parse(userIdClaim), idTravel);
                 return Ok();
             }
             catch (Exception ex)
@@ -45,12 +45,12 @@ namespace SchoolArrival.Controllers
             var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
             if (userRoleClaim != Role.Passenger.ToString())
             {
-                return Forbid("El usuario no esta autorizado para darse de baja del viaje.");
+                return StatusCode(403, "El usuario no esta autorizado para darse de baja del viaje.");
             }
             try
             {
                 var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                await _passengerService.DropTravel(int.Parse(userIdClaim), idTravel);
+                await _userService.DropTravel(int.Parse(userIdClaim), idTravel);
                 return Ok();
             }
             catch (Exception ex)

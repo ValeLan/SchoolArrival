@@ -4,20 +4,25 @@ using Application.Models.Dtos;
 using Application.Models.Requests;
 using SchoolArrival.Domain.Interfaces;
 using Domain.Entities;
+using System.Runtime.CompilerServices;
 
 namespace Application.Services
 {
     public class UserServices : IUserServices
     {
         private readonly IRepositoryBase<User> _userRepositoryBase;
+        private readonly IRepositoryBase<Travel> _travelRepositoryBase;
+        private readonly ITravelRepository _travelRepository;
         private readonly UserMapping _userMapping;
-        public UserServices(IRepositoryBase<User> userRepositoryBase, UserMapping userMapping)
+        public UserServices(IRepositoryBase<User> userRepositoryBase, UserMapping userMapping, IRepositoryBase<Travel> travelRepositoryBase, ITravelRepository travelRepository)
         {
             _userRepositoryBase = userRepositoryBase;
             _userMapping = userMapping;
+            _travelRepositoryBase = travelRepositoryBase;
+            _travelRepository = travelRepository;
         }
 
-        public  async Task<List<UserDto>> GetAllAsync()
+        public async Task<List<UserDto>> GetAllAsync()
         {
             var response = await _userRepositoryBase.ListAsync();
             var responseMapped = response.Select(e => _userMapping.FromEntityToResponse(e)).ToList();
@@ -54,11 +59,56 @@ namespace Application.Services
             return true;
         }
 
-        public async Task DeleteAsync (int idUser)
+        public async Task DeleteAsync(int idUser)
         {
-           var response = await _userRepositoryBase.GetByIdAsync(idUser);
-           await _userRepositoryBase.DeleteAsync(response);
+            var response = await _userRepositoryBase.GetByIdAsync(idUser);
+            await _userRepositoryBase.DeleteAsync(response);
         }
 
+        public async Task SignToTravel(int idUser, int idTravel)
+        {
+            var travel = await _travelRepository.GetById(idTravel);
+            if (travel == null)
+            {
+                throw new Exception("El viaje no fue encontrado.");
+            }
+            var user = await _userRepositoryBase.GetByIdAsync(idUser);
+            if (user == null)
+            {
+                throw new Exception("No se encontró el usuario");
+            }
+            // var _passengerMapping = new PassengerMapping();
+            //var passenger = _passengerMapping.FromUserToPassenger(user);
+
+            //if (!travel.Passengers.Any(p => p.Id == passenger.Id))
+            //{
+                
+            //}
+
+            travel.Passengers.Add(user);
+            await _travelRepositoryBase.SaveChangesAsync();
+        }
+
+        public async Task DropTravel(int idUser, int idTravel)
+        {
+            var travel = await _travelRepository.GetById(idTravel);
+            if (travel == null)
+            {
+                throw new Exception("El viaje no fue encontrado.");
+            }
+            var user = await _userRepositoryBase.GetByIdAsync(idUser);
+            if (user == null)
+            {
+                throw new Exception("No se encontró el usuario");
+            }
+            var _passengerMapping = new PassengerMapping();
+            var passenger = _passengerMapping.FromUserToPassenger(user);
+            var passengerToRemove = travel.Passengers.FirstOrDefault(p => p.Id == passenger.Id);
+            if (passengerToRemove != null)
+            {
+                travel.Passengers.Remove(passengerToRemove);
+                await _travelRepositoryBase.SaveChangesAsync();
+            }
+        }
     }
 }
