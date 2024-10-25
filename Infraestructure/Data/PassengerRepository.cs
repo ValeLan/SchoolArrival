@@ -17,14 +17,5 @@ namespace Infraestructure.Data
     {
         public PassengerRepository(TravelArrivalDbContext context) : base(context) { }
 
-        //public async Task<List<Passenger>> GetAllAsync()
-        //{
-        //    var entity = await _context.Passengers.Include(p => p.District).Include(p => p.School).ToListAsync(); 
-
-        //    return entity;
-        //}
-
-
-
     }
 }

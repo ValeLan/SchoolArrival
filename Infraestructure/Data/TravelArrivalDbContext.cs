@@ -12,6 +12,7 @@ namespace Infraestructure.Data
         public DbSet<Passenger> Passengers { get; set; }
         public DbSet<Travel> Travels { get; set; }
         public DbSet<School> Schools { get; set; }
+        public DbSet<User> Users { get; set; }
         public TravelArrivalDbContext(DbContextOptions<TravelArrivalDbContext> options) : base(options)
         {
 
