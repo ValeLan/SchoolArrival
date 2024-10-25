@@ -17,5 +17,10 @@ namespace Infraestructure.Data
     {
         public PassengerRepository(TravelArrivalDbContext context) : base(context) { }
 
+        public Passenger? Authenticate(string username, string password)
+        {
+            Passenger? userToAuthenticate = _context.Passengers.FirstOrDefault(u => u.FullName == username && u.Password == password);
+            return userToAuthenticate;
+        }
     }
 }

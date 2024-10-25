@@ -1,9 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models.Dtos;
 using Domain.Entities;
-using Infraestructure.Data;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,19 +15,19 @@ namespace SchoolArrival.Controllers
     [Authorize]
     public class AuthenticateController : ControllerBase
     {
-        private readonly IUserServices _userServices;
+        private readonly IPassengerService _passengerServices;
         private readonly IConfiguration _config;
 
-        public AuthenticateController(IUserServices userServices, IConfiguration config)
+        public AuthenticateController(IPassengerService passengerServices, IConfiguration config)
         {
-            _userServices = userServices;
+            _passengerServices = passengerServices;
             _config = config;
         }   
 
         [HttpPost]
         public IActionResult Authenticate([FromBody] CredentialsForAuthenticateDto credentials)
         {
-            User? userAuthenticated = _userServices.Authenticate(credentials.Username, credentials.Password);
+            Passenger? userAuthenticated = _passengerServices.Authenticate(credentials.Username, credentials.Password);
             if (userAuthenticated is not null)
             {
                 var securityPassword = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_config["Authentication:SecretForKey"])); //Traemos la SecretKey del Json. agregar antes: using Microsoft.IdentityModel.Tokens;

@@ -68,5 +68,10 @@ namespace Application.Services
             var entity = await _passengerRepositoryBase.GetByIdAsync(id);
             await _passengerRepositoryBase.DeleteAsync(entity);
         }
+
+        public Passenger? Authenticate(string username, string password)
+        {
+            return _passengerRepository.Authenticate(username, password);
+        }
     }
 }

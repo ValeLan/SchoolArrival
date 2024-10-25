@@ -69,8 +69,9 @@ builder.Services.AddScoped<IRepositoryBase<Travel>, EfRepository<Travel>>();
 builder.Services.AddScoped<IRepositoryBase<Driver>, EfRepository<Driver>>();
 builder.Services.AddScoped<IRepositoryBase<Passenger>, EfRepository<Passenger>>();
 //
-builder.Services.AddScoped<IUserServices, UserServices>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+//builder.Services.AddScoped<IUserServices, UserServices>();
+//builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 //
 builder.Services.AddScoped<DriverMapping>();
 builder.Services.AddScoped<TravelMapping>();

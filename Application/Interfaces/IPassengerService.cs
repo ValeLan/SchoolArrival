@@ -1,5 +1,6 @@
 ﻿using Application.Models.Dtos;
 using Application.Models.Requests;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,6 @@ namespace Application.Interfaces
 
         Task<bool> UpdatePassengerAsync(int id, PassengerSaveRequest request);
         Task DeletePassengerAsync(int id);
+        Passenger? Authenticate(string username, string password);
     }
 }
