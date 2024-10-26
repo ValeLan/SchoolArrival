@@ -49,7 +49,7 @@ namespace SchoolArrival.Controllers
 
                 if (userIdClaim == null || idUser != int.Parse(userIdClaim))
                 {
-                    return StatusCode(403, "El usuario no está autorizado para eliminar este usuario.");
+                    return StatusCode(403, "El usuario no está autorizado para modificar este usuario.");
                 }
 
                 bool response = await _userServices.UpdateUserAsync(idUser, request);

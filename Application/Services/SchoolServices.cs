@@ -4,12 +4,6 @@ using Application.Models.Dtos;
 using Application.Models.Requests;
 using SchoolArrival.Domain.Interfaces;
 using Domain.Entities;
-using Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -35,8 +29,9 @@ namespace Application.Services
         {
             var entity = _schoolMapping.FromRequestToEntity(school);
             var response = await _schoolRepositoryBase.AddAsync(entity);
+            var responseMapped = _schoolMapping.FromEntityToResponse(response);
 
-            return _schoolMapping.FromEntityToResponse(response);
+            return responseMapped;
         }
 
         public async Task<bool> UpdateSchoolAsync(int idSchool, SchoolSaveRequest request)

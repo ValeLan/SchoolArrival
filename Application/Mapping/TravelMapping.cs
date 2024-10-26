@@ -26,7 +26,7 @@ namespace Application.Mapping
             {
                 Id = travel.Id,
                 Hour = travel.Hour,
-                SchoolDto = _schoolMapping.FromEntityToResponse(travel.School),
+                School = _schoolMapping.FromEntityToResponse(travel.School),
                 Passengers = travel.Passengers.Select(p => _userMapping.FromEntityToResponse(p)).ToList()
 
             };

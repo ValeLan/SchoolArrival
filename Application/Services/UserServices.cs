@@ -77,11 +77,17 @@ namespace Application.Services
             {
                 throw new Exception("No se encontró el usuario");
             }
-            if(travel.Capacity <= 0)
+
+            if (travel.Capacity <= 0)
             {
                 throw new Exception("Sin capacidad.");
             }
-            travel.Capacity = travel.Capacity -1;
+            if (travel.Passengers.Any(p => p.Id == idUser))
+            {
+                throw new Exception("El usuario ya está registrado en el viaje.");
+            }
+
+            travel.Capacity -= 1;
             travel.Passengers.Add(user);
             await _travelRepositoryBase.SaveChangesAsync();
 
@@ -103,7 +109,7 @@ namespace Application.Services
             var passengerToRemove = travel.Passengers.FirstOrDefault(p => p.Id == user.Id);
             if (passengerToRemove != null)
             {
-                travel.Capacity -= 1;
+                travel.Capacity += 1;
                 travel.Passengers.Remove(passengerToRemove);
                 await _travelRepositoryBase.SaveChangesAsync();
             }

@@ -53,7 +53,7 @@ namespace SchoolArrival.Controllers
                 var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
                 if (userRoleClaim == Role.Passenger.ToString())
                 {
-                    return StatusCode(403, "El pasajero no esta autorizado para crear viajes.");
+                    return StatusCode(403, "El pasajero no esta autorizado para modificar viajes.");
                 }
 
                 bool response = await _travelServices.UpdateTravelAsync(idTravel, request);

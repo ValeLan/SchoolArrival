@@ -18,6 +18,11 @@ namespace Application.Mapping
 
         public SchoolDto FromEntityToResponse(School school)
         {
+            if (school == null)
+            {
+                throw new Exception("La escuela no puede ser nulo.");
+            }
+
             var dto = new SchoolDto
             {
                 Id = school.Id,
