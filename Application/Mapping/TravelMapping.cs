@@ -13,6 +13,7 @@ namespace Application.Mapping
             {
                 Hour = dto.Hour,
                 SchoolId = dto.SchoolId,
+                Capacity = 20
             };
             return travel;
         }

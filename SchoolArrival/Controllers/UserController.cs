@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
 using Application.Models.Requests;
-using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -9,7 +8,7 @@ namespace SchoolArrival.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    
     public class UserController : ControllerBase
     {
         private readonly IUserServices _userServices;
@@ -40,12 +39,18 @@ namespace SchoolArrival.Controllers
             var response = await _userServices.CreateUser(request);
             return Ok(response);
         }
-
+        [Authorize]
         [HttpPut("{idUser}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] int idUser, [FromBody] UserRequest request)
         {
             try
             {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userIdClaim == null || idUser != int.Parse(userIdClaim))
+                {
+                    return StatusCode(403, "El usuario no está autorizado para eliminar este usuario.");
+                }
 
                 bool response = await _userServices.UpdateUserAsync(idUser, request);
                 if (response == false)
@@ -59,7 +64,7 @@ namespace SchoolArrival.Controllers
                 return BadRequest();
             }
         }
-
+        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeleteUser(int idUser)
         {

@@ -10,6 +10,8 @@ namespace Domain.Entities
         public int Id { get; set; }
         public string? Hour { get; set; }
         public int SchoolId { get; set; }
+
+        public int Capacity { get; set; } = 20;
         public School? School { get; set; }
         public List<User> Passengers { get; set; } = new List<User>();
 

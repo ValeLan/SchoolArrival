@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
 using Application.Models.Requests;
-using Application.Services;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +9,7 @@ namespace SchoolArrival.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    
     public class TravelController : ControllerBase
     {
         private readonly ITravelServices _travelServices;
@@ -24,7 +23,7 @@ namespace SchoolArrival.Controllers
         {
             return Ok(await _travelServices.GetAllAsync());
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateTravel(TravelSaveRequest request)
         {
@@ -35,6 +34,7 @@ namespace SchoolArrival.Controllers
                 {
                     return StatusCode(403, "El pasajero no esta autorizado para crear viajes.");
                 }
+
                 await _travelServices.CreateAsync(request);
                 return Ok();
             }
@@ -44,7 +44,7 @@ namespace SchoolArrival.Controllers
             }
             
         }
-
+        [Authorize]
         [HttpPut("{idTravel}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] int idTravel, [FromBody] TravelSaveRequest request)
         {
@@ -68,7 +68,7 @@ namespace SchoolArrival.Controllers
                 return BadRequest();
             }
         }
-
+        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeleteUser(int idTravel)
         {
@@ -79,7 +79,7 @@ namespace SchoolArrival.Controllers
                 var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
                 if (userRoleClaim == Role.Passenger.ToString())
                 {
-                    return StatusCode(403, "El pasajero no esta autorizado para crear viajes.");
+                    return StatusCode(403, "El pasajero no esta autorizado para eliminar viajes.");
                 }
                 if (response == null)
                 {

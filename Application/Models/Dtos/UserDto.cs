@@ -1,7 +1,4 @@
-﻿using Domain.Enums;
-using Domain.Models;
-
-namespace Application.Models.Dtos
+﻿namespace Application.Models.Dtos
 {
     public class UserDto
     {

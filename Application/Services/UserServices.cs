@@ -4,7 +4,7 @@ using Application.Models.Dtos;
 using Application.Models.Requests;
 using SchoolArrival.Domain.Interfaces;
 using Domain.Entities;
-using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace Application.Services
 {
@@ -77,16 +77,14 @@ namespace Application.Services
             {
                 throw new Exception("No se encontró el usuario");
             }
-            // var _passengerMapping = new PassengerMapping();
-            //var passenger = _passengerMapping.FromUserToPassenger(user);
-
-            //if (!travel.Passengers.Any(p => p.Id == passenger.Id))
-            //{
-                
-            //}
-
+            if(travel.Capacity <= 0)
+            {
+                throw new Exception("Sin capacidad.");
+            }
+            travel.Capacity = travel.Capacity -1;
             travel.Passengers.Add(user);
             await _travelRepositoryBase.SaveChangesAsync();
+
         }
 
         public async Task DropTravel(int idUser, int idTravel)
@@ -101,14 +99,15 @@ namespace Application.Services
             {
                 throw new Exception("No se encontró el usuario");
             }
-            var _passengerMapping = new PassengerMapping();
-            var passenger = _passengerMapping.FromUserToPassenger(user);
-            var passengerToRemove = travel.Passengers.FirstOrDefault(p => p.Id == passenger.Id);
+            
+            var passengerToRemove = travel.Passengers.FirstOrDefault(p => p.Id == user.Id);
             if (passengerToRemove != null)
             {
+                travel.Capacity -= 1;
                 travel.Passengers.Remove(passengerToRemove);
                 await _travelRepositoryBase.SaveChangesAsync();
             }
+            
         }
     }
 }

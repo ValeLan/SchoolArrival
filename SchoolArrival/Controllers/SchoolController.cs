@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
 using Application.Models.Requests;
-using Application.Services;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -40,8 +39,6 @@ namespace SchoolArrival.Controllers
             await _schoolServices.CreateSchoolAsync(request);
             return Ok();
 
-            //var response = await _schoolServices.CreateSchoolAsync(request);
-            //return Ok(response);
         }
         [Authorize]
         [HttpPut("{idSchool}")]
