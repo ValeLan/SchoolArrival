@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -8,12 +9,11 @@ namespace SchoolArrival.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
-    public class UserController : ControllerBase
+    public class AdminController : ControllerBase
     {
-        private readonly IUserServices _userServices;
+        private readonly IAdminServices _userServices;
 
-        public UserController(IUserServices userServices)
+        public AdminController(IAdminServices userServices)
         {
             _userServices = userServices;
         }
@@ -21,27 +21,32 @@ namespace SchoolArrival.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var response = await _userServices.GetAllAsync();
+            var response = await _userServices.GetAllAdminsAsync();
             return Ok(response);
         }
 
         [HttpGet("{idUser}")]
-        public async Task<IActionResult> GetByIdAsync([FromRoute]int idUser)
+        public async Task<IActionResult> GetByIdAsync([FromRoute] int idUser)
         {
-            var response = await _userServices.GetAsync(idUser);
+            var response = await _userServices.GetAdminAsync(idUser);
+            if (response == null)
+            {
+                return StatusCode(404, "El usuario no fue encontrado.");
+            }    
             return Ok(response);
         }
-        
+
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(UserRequest request)
+        public async Task<IActionResult> CreateUser(AdminRequest request)
         {
             var response = await _userServices.CreateUser(request);
             return Ok(response);
         }
+
         [Authorize]
         [HttpPut("{idUser}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] int idUser, [FromBody] UserRequest request)
+        public async Task<IActionResult> UpdateAsync([FromRoute] int idUser, [FromBody] AdminRequest request)
         {
             try
             {
@@ -64,17 +69,19 @@ namespace SchoolArrival.Controllers
                 return BadRequest();
             }
         }
+
         [Authorize]
+
         [HttpDelete]
         public async Task<IActionResult> DeleteUser(int idUser)
         {
-            var response = await _userServices.GetAsync(idUser);
+            var response = await _userServices.GetAdminAsync(idUser);
 
             try
             {
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-                if (userIdClaim == null  || response.Id != int.Parse(userIdClaim))
+                if (userIdClaim == null || response.Id != int.Parse(userIdClaim))
                 {
                     return StatusCode(403, "El usuario no está autorizado para eliminar este usuario.");
                 }
@@ -93,5 +100,4 @@ namespace SchoolArrival.Controllers
             }
         }
     }
-
 }

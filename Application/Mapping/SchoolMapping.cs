@@ -23,7 +23,6 @@ namespace Application.Mapping
                 Id = school.Id,
                 Name = school.Name,
                 SchoolAdress = school.SchoolAdress,
-
             };
             return dto;
         }

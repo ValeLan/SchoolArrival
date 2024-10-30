@@ -7,8 +7,10 @@ namespace Application.Interfaces
     {
         Task<List<TravelDto>> GetAllAsync();
         Task<TravelDto> GetAsync(int idTravel);
-        Task<TravelDto> CreateAsync(TravelSaveRequest travel);
+        Task<bool> CreateAsync(TravelSaveRequest travel);
         Task<bool> UpdateTravelAsync(int idTravel, TravelSaveRequest request);
-        Task DeleteAsync(int idTravel);
+
+        Task<bool> CompleteTravel(int idTravel);
+        Task<bool> DeleteAsync(int idTravel);
     }
 }

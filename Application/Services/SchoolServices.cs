@@ -31,12 +31,10 @@ namespace Application.Services
             return responseMapped;
         }
 
-        public async Task<SchoolDto> CreateSchoolAsync(SchoolSaveRequest school)
+        public async Task CreateSchoolAsync(SchoolSaveRequest school)
         {
             var entity = _schoolMapping.FromRequestToEntity(school);
             var response = await _schoolRepositoryBase.AddAsync(entity);
-
-            return _schoolMapping.FromEntityToResponse(response);
         }
 
         public async Task<bool> UpdateSchoolAsync(int idSchool, SchoolSaveRequest request)

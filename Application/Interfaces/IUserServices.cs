@@ -6,11 +6,11 @@ namespace Application.Interfaces
 {
     public interface IUserServices
     {
-        Task<bool> CreateUser(UserRequest request);
-        Task<List<UserDto>> GetAllAsync();
-        Task<UserDto> GetAsync(int idUser);
+        Task<bool> CreateUser(PassengerRequest request);
+        Task<List<PassengerDto>> GetAllPassengersAsync();
+        Task<PassengerDto> GetPassengerAsync(int idUser);
         Task DeleteAsync(int idUser);
-        Task<bool> UpdateUserAsync(int idUser, UserRequest request);
+        Task<bool> UpdateUserAsync(int idUser, PassengerRequest request);
         Task SignToTravel(int idUser, int idTravel);
         Task DropTravel(int idUser, int idTravel);
 

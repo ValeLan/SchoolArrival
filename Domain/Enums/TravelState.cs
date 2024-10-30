@@ -8,8 +8,8 @@ namespace Domain.Models
 {
     public enum TravelState
     {
-        Llegando,
-        EnCamino,
+        EnProceso,
         Completado
+        //Cancelado
     }
 }

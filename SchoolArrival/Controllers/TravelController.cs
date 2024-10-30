@@ -23,9 +23,11 @@ namespace SchoolArrival.Controllers
         {
             return Ok(await _travelServices.GetAllAsync());
         }
+
         [Authorize]
+
         [HttpPost]
-        public async Task<IActionResult> CreateTravel(TravelSaveRequest request)
+        public async Task<IActionResult> CreateTravel([FromBody] TravelSaveRequest request)
         {
             try
             {
@@ -35,8 +37,15 @@ namespace SchoolArrival.Controllers
                     return StatusCode(403, "El pasajero no esta autorizado para crear viajes.");
                 }
 
-                await _travelServices.CreateAsync(request);
-                return Ok();
+                var response = await _travelServices.CreateAsync(request);
+
+                if (response)
+                {
+                    return Ok();
+                }
+                
+                return BadRequest("Debe ingresar un chofer y una escuela válidos.");
+                
             }
             catch (Exception ex)
             {
@@ -45,7 +54,7 @@ namespace SchoolArrival.Controllers
             
         }
         [Authorize]
-        [HttpPut("{idTravel}")]
+        [HttpPut("id/{idTravel}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] int idTravel, [FromBody] TravelSaveRequest request)
         {
             try
@@ -53,7 +62,7 @@ namespace SchoolArrival.Controllers
                 var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
                 if (userRoleClaim == Role.Passenger.ToString())
                 {
-                    return StatusCode(403, "El pasajero no esta autorizado para crear viajes.");
+                    return StatusCode(403, "El pasajero no esta autorizado para modificar viajes.");
                 }
 
                 bool response = await _travelServices.UpdateTravelAsync(idTravel, request);
@@ -63,17 +72,16 @@ namespace SchoolArrival.Controllers
                 }
                 return NoContent();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
-        [Authorize]
-        [HttpDelete]
-        public async Task<IActionResult> DeleteUser(int idTravel)
-        {
-            var response = await _travelServices.GetAsync(idTravel);
 
+        [Authorize]
+        [HttpPut("TravelCompleted/id/{idTravel}")]
+        public async Task<IActionResult> UpdateState([FromRoute] int idTravel)
+        {
             try
             {
                 var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
@@ -81,12 +89,36 @@ namespace SchoolArrival.Controllers
                 {
                     return StatusCode(403, "El pasajero no esta autorizado para eliminar viajes.");
                 }
-                if (response == null)
+                bool response = await _travelServices.CompleteTravel(idTravel);
+                if(response == false)
                 {
-                    return NotFound();
+                    return NotFound("No se encontro el Viaje.");
                 }
-                await _travelServices.DeleteAsync(response.Id);
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
 
+        [Authorize]
+        [HttpDelete("id/{idTravel}")]
+        public async Task<IActionResult> DeleteTravel([FromRoute]int idTravel)
+        {
+            try
+            {
+                var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                if (userRoleClaim == Role.Passenger.ToString())
+                {
+                    return StatusCode(403, "El pasajero no esta autorizado para eliminar viajes.");
+                }
+
+                bool response = await _travelServices.DeleteAsync(idTravel);
+                if (response == false)
+                {
+                    return NotFound("No se encontro el Viaje.");
+                }
                 return NoContent();
             }
             catch (Exception)

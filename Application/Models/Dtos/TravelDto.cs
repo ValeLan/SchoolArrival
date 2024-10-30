@@ -4,7 +4,10 @@
     {
         public int Id { get; set; }
         public string? Hour { get; set; }
-        public SchoolDto? SchoolDto { get; set; }
-        public List<UserDto> Passengers { get; set; } = new List<UserDto>();
+        public int Capacity { get; set; }
+        public string? State { get; set; }
+        public SchoolDto? School { get; set; }
+        public DriverDto? Driver { get; set; }
+        public List<PassengerDto> Passengers { get; set; } = new List<PassengerDto>();
     }
 }

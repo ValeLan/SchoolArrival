@@ -3,6 +3,7 @@ using System;
 using Infraestructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestructure.Migrations
 {
     [DbContext(typeof(TravelArrivalDbContext))]
-    partial class TravelArrivalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241030175131_Final")]
+    partial class Final
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -24,11 +27,9 @@ namespace Infraestructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SchoolAdress")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -49,7 +50,6 @@ namespace Infraestructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Hour")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SchoolId")
@@ -74,32 +74,27 @@ namespace Infraestructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("DNI")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("District")
+                    b.Property<int?>("District")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FullName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Role")
+                    b.Property<int?>("Role")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("TravelId")

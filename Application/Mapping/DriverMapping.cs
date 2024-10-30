@@ -1,27 +1,36 @@
 ﻿using Application.Models.Dtos;
 using Application.Models.Requests;
 using Domain.Entities;
+using Domain.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.Mapping
 {
-    public class UserMapping
+    public class DriverMapping
     {
-        public User FromRequestToEntity(UserRequest dto)
+        public User FromRequestToEntity(DriverRequest dto)
         {
             var user = new User
             {
+                Email = dto.Email,
                 FullName = dto.FullName,
                 Password = dto.Password,
-                Email = dto.Email,
-                Role = dto.Role,
+                PhoneNumber = dto.PhoneNumber,
+                DNI = dto.DNI,
+                IsActive = true,
+                Role = Role.Driver,
             };
 
             return user;
         }
 
-        public UserDto FromEntityToResponse(User dto) 
+        public DriverDto FromEntityToResponse(User dto)
         {
-            var request = new UserDto
+            var request = new DriverDto
             {
                 Id = dto.Id,
                 FullName = dto.FullName,
@@ -29,21 +38,16 @@ namespace Application.Mapping
                 PhoneNumber = dto.PhoneNumber,
                 DNI = dto.DNI,
                 Role = dto.Role.ToString(),
-                District = dto.District.ToString(),
-                
             };
             return request;
         }
 
-        public User FromEntityToEntityUpdated(User user, UserRequest userRequest)
+        public User FromEntityToEntityUpdated(User user, DriverRequest userRequest)
         {
             user.FullName = userRequest.FullName ?? user.FullName;
-            user.Password = userRequest.Password ?? user.Password;
             user.Email = userRequest.Email ?? user.Email;
-            user.Role = userRequest.Role;
-
+            user.PhoneNumber = userRequest.PhoneNumber ?? user.PhoneNumber;
             return user;
         }
-
     }
 }

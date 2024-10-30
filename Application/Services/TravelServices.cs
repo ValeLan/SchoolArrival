@@ -4,66 +4,110 @@ using Application.Models.Dtos;
 using Application.Models.Requests;
 using SchoolArrival.Domain.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
+using System.Diagnostics;
 
 namespace Application.Services
 {
     public class TravelServices : ITravelServices
     {
         private readonly IRepositoryBase<Travel> _travelRepositoryBase;
+        private readonly IRepositoryBase<School> _schoolRepositoryBase;
+        private readonly IDriverRepository _driverRepository;
         private readonly ITravelRepository _travelRepository;
         private readonly TravelMapping _travelMapping;
 
-        public TravelServices(IRepositoryBase<Travel> travelRepositoryBase, TravelMapping TravelMapping, ITravelRepository travelRepository)
+        public TravelServices(IRepositoryBase<Travel> travelRepositoryBase, TravelMapping TravelMapping, ITravelRepository travelRepository, IDriverRepository userRepositoryBase, IRepositoryBase<School> schoolRepositoryBase)
         {
             _travelMapping = TravelMapping;
             _travelRepositoryBase = travelRepositoryBase;
             _travelRepository = travelRepository;
+            _driverRepository = userRepositoryBase;
+            _schoolRepositoryBase = schoolRepositoryBase;
         }
 
-        public async Task<List<TravelDto>> GetAllAsync()
+        public async Task<List<TravelDto?>> GetAllAsync()
         {
             var response = await _travelRepository.GetAll();
+            if (response == null) 
+            {
+                return null;
+            }
             var responseMapped = response.Select(e => _travelMapping.FromEntityToResponse(e)).ToList();
+            
             return responseMapped;
         }
-        public async Task<TravelDto> GetAsync(int idTravel)
+        public async Task<TravelDto?> GetAsync(int idTravel)
         {
             var response = await GetAllAsync();
+            if (response == null)
+            {
+                return null;
+            }
             var newResponse = response.FirstOrDefault(e => e.Id == idTravel);
             return newResponse;
 
         }
 
-        public async Task<TravelDto> CreateAsync(TravelSaveRequest travel)
+        public async Task<bool> CreateAsync(TravelSaveRequest travel)
         {
-            var entity = _travelMapping.FromRequestToEntity(travel);
-            var response = await _travelRepositoryBase.AddAsync(entity);
-            var responseMapped = _travelMapping.FromEntityToResponse(response);
-            
-            return  responseMapped; 
+            var driver = _driverRepository.GetAll();
+            var school = await _schoolRepositoryBase.ListAsync();
+            if (driver.Any(e => e.Id == travel.DriverId) && school.Any(e => e.Id == travel.SchoolId))
+            {
+                var entity = _travelMapping.FromRequestToEntity(travel);
+
+                var response = await _travelRepositoryBase.AddAsync(entity);
+                return true;
+            }
+
+            return false;
         }
 
 
         public async Task<bool> UpdateTravelAsync(int idTravel, TravelSaveRequest request)
         {
             var entity = await _travelRepositoryBase.GetByIdAsync(idTravel);
-
+            var driver = _driverRepository.GetAll();
+            var school = await _schoolRepositoryBase.ListAsync();
+            
             if (entity == null)
             {
                 return false;
             }
-            var entityUpdated = _travelMapping.FromEntityToEntityUpdated(entity, request);
+            if (driver.Any(e => e.Id == request.DriverId) && school.Any(e => e.Id == request.SchoolId))
+            {
+                var entityUpdated = _travelMapping.FromEntityToEntityUpdated(entity, request);
 
-            await _travelRepositoryBase.UpdateAsync(entityUpdated);
+                await _travelRepositoryBase.UpdateAsync(entityUpdated);
 
+                return true;
+            }
+            throw new Exception("Debe ingresar un chofer y una escuela válidos.");
+        }
+
+        public async Task<bool> CompleteTravel(int idTravel)
+        {
+            var response = await _travelRepositoryBase.GetByIdAsync(idTravel);
+
+            if (response == null)
+            {
+                return false;
+            }
+            _travelMapping.CompleteTravel(response);
+            await _travelRepositoryBase.UpdateAsync(response);
             return true;
         }
 
-
-        public async Task DeleteAsync(int idTravel)
+        public async Task<bool> DeleteAsync(int idTravel)
         {
             var response = await _travelRepositoryBase.GetByIdAsync(idTravel);
+            if (response == null)
+            {
+                return false;
+            }
             await _travelRepositoryBase.DeleteAsync(response);
+            return true;
         }
 
 

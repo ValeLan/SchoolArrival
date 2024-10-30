@@ -1,6 +1,8 @@
 ﻿using Application.Interfaces;
 using Application.Models.Requests;
+using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -8,12 +10,11 @@ namespace SchoolArrival.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
-    public class PassengerController : ControllerBase
+    public class DriverController : ControllerBase
     {
-        private readonly IUserServices _userServices;
+        private readonly IDriverServices _userServices;
 
-        public PassengerController(IUserServices userServices)
+        public DriverController(IDriverServices userServices)
         {
             _userServices = userServices;
         }
@@ -21,31 +22,37 @@ namespace SchoolArrival.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var response = await _userServices.GetAllPassengersAsync();
+            var response = await _userServices.GetAllDriversAsync();
             return Ok(response);
         }
 
         [HttpGet("{idUser}")]
-        public async Task<IActionResult> GetByIdAsync([FromRoute]int idUser)
+        public async Task<IActionResult> GetByIdAsync([FromRoute] int idUser)
         {
-            var response = await _userServices.GetPassengerAsync(idUser);
+            var response = await _userServices.GetDriverAsync(idUser);
             if (response == null)
             {
                 return StatusCode(404, "El usuario no fue encontrado.");
             }
             return Ok(response);
         }
-        
 
+        [Authorize]
         [HttpPost]
-        public async Task<IActionResult> CreateUser(PassengerRequest request)
+        public async Task<IActionResult> CreateUser(DriverRequest request)
         {
+            var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            if (userRoleClaim != Role.Admin.ToString())
+            {
+                return StatusCode(403, "El usuario no esta autorizado para crear un Driver.");
+            }
             var response = await _userServices.CreateUser(request);
             return Ok(response);
         }
+
         [Authorize]
         [HttpPut("{idUser}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] int idUser, [FromBody] PassengerRequest request)
+        public async Task<IActionResult> UpdateAsync([FromRoute] int idUser, [FromBody] DriverRequest request)
         {
             try
             {
@@ -53,7 +60,7 @@ namespace SchoolArrival.Controllers
 
                 if (userIdClaim == null || idUser != int.Parse(userIdClaim))
                 {
-                    return StatusCode(403, "El usuario no está autorizado para eliminar este usuario.");
+                    return StatusCode(403, "El usuario no está autorizado para modificar este usuario.");
                 }
 
                 bool response = await _userServices.UpdateUserAsync(idUser, request);
@@ -68,17 +75,32 @@ namespace SchoolArrival.Controllers
                 return BadRequest();
             }
         }
+
         [Authorize]
+
         [HttpDelete]
         public async Task<IActionResult> DeleteUser(int idUser)
         {
-            var response = await _userServices.GetPassengerAsync(idUser);
+            var response = await _userServices.GetDriverAsync(idUser);
 
             try
             {
+                var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                if (userRoleClaim == Role.Passenger.ToString())
+                {
+                    return StatusCode(403, "El usuario no esta autorizado para eliminar un Driver.");
+                }
+
+                if (userRoleClaim == Role.Admin.ToString())
+                {
+                    await _userServices.DeleteAsync(response.Id);
+
+                    return NoContent();
+                }
+
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-                if (userIdClaim == null  || response.Id != int.Parse(userIdClaim))
+                if (userIdClaim == null || response.Id != int.Parse(userIdClaim))
                 {
                     return StatusCode(403, "El usuario no está autorizado para eliminar este usuario.");
                 }
@@ -97,5 +119,4 @@ namespace SchoolArrival.Controllers
             }
         }
     }
-
 }

@@ -21,10 +21,6 @@ namespace SchoolArrival.Controllers
         public async Task<IActionResult> GetAll()
         {
             var school = await _schoolServices.GetAllAsync();
-            if (school.Count == 0)
-            {
-                return NotFound();
-            }
             return Ok(school);
         }
         [Authorize]

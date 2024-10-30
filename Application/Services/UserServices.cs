@@ -5,6 +5,9 @@ using Application.Models.Requests;
 using SchoolArrival.Domain.Interfaces;
 using Domain.Entities;
 using System.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
+using System.Data;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Application.Services
 {
@@ -13,8 +16,8 @@ namespace Application.Services
         private readonly IRepositoryBase<User> _userRepositoryBase;
         private readonly IRepositoryBase<Travel> _travelRepositoryBase;
         private readonly ITravelRepository _travelRepository;
-        private readonly UserMapping _userMapping;
-        public UserServices(IRepositoryBase<User> userRepositoryBase, UserMapping userMapping, IRepositoryBase<Travel> travelRepositoryBase, ITravelRepository travelRepository)
+        private readonly PassengerMapping _userMapping;
+        public UserServices(IRepositoryBase<User> userRepositoryBase, PassengerMapping userMapping, IRepositoryBase<Travel> travelRepositoryBase, ITravelRepository travelRepository)
         {
             _userRepositoryBase = userRepositoryBase;
             _userMapping = userMapping;
@@ -22,29 +25,42 @@ namespace Application.Services
             _travelRepository = travelRepository;
         }
 
-        public async Task<List<UserDto>> GetAllAsync()
+        public async Task<List<PassengerDto?>> GetAllPassengersAsync()
         {
             var response = await _userRepositoryBase.ListAsync();
-            var responseMapped = response.Select(e => _userMapping.FromEntityToResponse(e)).ToList();
+            var filteredResponse = response
+                .Where(e => e.Role == Domain.Enums.Role.Passenger && e.IsActive)
+                .ToList();                                 //Devuelvo solamente los activos
+            var responseMapped = filteredResponse
+                .Select(e => _userMapping.FromEntityToResponse(e))
+                .ToList();
             return responseMapped;
         }
 
-        public async Task<UserDto> GetAsync(int idUser)
+        public async Task<PassengerDto?> GetPassengerAsync(int idUser)
         {
-            var response = await GetAllAsync();
+            var response = await GetAllPassengersAsync();
             var newResponse = response.FirstOrDefault(e => e.Id == idUser);
-            return newResponse;
+            if (newResponse != null)
+            {
+                return newResponse;
+            }
+            else 
+            {
+                return null;
+            }
+
 
         }
 
-        public async Task<bool> CreateUser(UserRequest request)
+        public async Task<bool> CreateUser(PassengerRequest request)
         {
             var entity = _userMapping.FromRequestToEntity(request);
             await _userRepositoryBase.AddAsync(entity);
             return true;
         }
 
-        public async Task<bool> UpdateUserAsync(int idUser, UserRequest request)
+        public async Task<bool> UpdateUserAsync(int idUser, PassengerRequest request)
         {
             var entity = await _userRepositoryBase.GetByIdAsync(idUser);
 
@@ -62,7 +78,8 @@ namespace Application.Services
         public async Task DeleteAsync(int idUser)
         {
             var response = await _userRepositoryBase.GetByIdAsync(idUser);
-            await _userRepositoryBase.DeleteAsync(response);
+            response.IsActive = false;
+            await _userRepositoryBase.UpdateAsync(response);
         }
 
         public async Task SignToTravel(int idUser, int idTravel)
@@ -77,9 +94,13 @@ namespace Application.Services
             {
                 throw new Exception("No se encontró el usuario");
             }
-            if(travel.Capacity <= 0)
+            if (travel.Capacity <= 0)
             {
                 throw new Exception("Sin capacidad.");
+            }
+            if (travel.Passengers.Contains(user))
+            {
+                throw new Exception("El pasajero ya se encuentra registrado en el viaje.");
             }
             travel.Capacity = travel.Capacity -1;
             travel.Passengers.Add(user);
@@ -103,7 +124,7 @@ namespace Application.Services
             var passengerToRemove = travel.Passengers.FirstOrDefault(p => p.Id == user.Id);
             if (passengerToRemove != null)
             {
-                travel.Capacity -= 1;
+                travel.Capacity += 1;
                 travel.Passengers.Remove(passengerToRemove);
                 await _travelRepositoryBase.SaveChangesAsync();
             }

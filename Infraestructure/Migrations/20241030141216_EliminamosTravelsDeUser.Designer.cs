@@ -3,6 +3,7 @@ using System;
 using Infraestructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infraestructure.Migrations
 {
     [DbContext(typeof(TravelArrivalDbContext))]
-    partial class TravelArrivalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241030141216_EliminamosTravelsDeUser")]
+    partial class EliminamosTravelsDeUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -24,11 +27,9 @@ namespace Infraestructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SchoolAdress")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -45,22 +46,13 @@ namespace Infraestructure.Migrations
                     b.Property<int>("Capacity")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DriverId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Hour")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("SchoolId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("State")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("DriverId");
 
                     b.HasIndex("SchoolId");
 
@@ -74,32 +66,27 @@ namespace Infraestructure.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("DNI")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("District")
+                    b.Property<int?>("District")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FullName")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Role")
+                    b.Property<int?>("Role")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("TravelId")
@@ -114,19 +101,11 @@ namespace Infraestructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Travel", b =>
                 {
-                    b.HasOne("Domain.Entities.User", "Driver")
-                        .WithMany()
-                        .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.School", "School")
                         .WithMany()
                         .HasForeignKey("SchoolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Driver");
 
                     b.Navigation("School");
                 });

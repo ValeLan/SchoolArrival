@@ -14,12 +14,17 @@ namespace Infraestructure.Data
             return await _context.Travels
                 .Include(e => e.School)
                 .Include(e => e.Passengers)
+                .Include(e => e.Driver)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<List<Travel>> GetAll()
         {
-            return await _context.Travels.Include(e => e.School).Include(e => e.Passengers).ToListAsync();
+            return await _context.Travels
+                .Include(e => e.School)
+                .Include(e => e.Passengers)
+                .Include (e => e.Driver)
+                .ToListAsync();
         }
     }
 }
