@@ -70,8 +70,7 @@ namespace Application.Services
         public async Task DeleteAsync(int idUser)
         {
             var response = await _userRepositoryBase.GetByIdAsync(idUser);
-            response.IsActive = false;
-            await _userRepositoryBase.UpdateAsync(response);
+            await _userRepositoryBase.DeleteAsync(response);
         }
     }
 }

@@ -18,14 +18,31 @@ namespace SchoolArrival.Controllers
             _travelServices = travelServices;
         }
 
-        [HttpGet]
+        [HttpGet("Historical")]
         public async Task<IActionResult> GetAllAsync()
         {
-            return Ok(await _travelServices.GetAllAsync());
+            return Ok(await _travelServices.GetHistoricalAsync());
+        }
+
+        [HttpGet("Pending")]
+        public async Task<IActionResult> GetAllPendingAsync()
+        {
+            return Ok(await _travelServices.GetAllPendingAsync());
+        }
+
+        [HttpGet("Completed")]
+        public async Task<IActionResult> GetAllCompletedAsync()
+        {
+            return Ok(await _travelServices.GetAllCompletedAsync());
+        }
+
+        [HttpGet("Canceled")]
+        public async Task<IActionResult> GetAllCanceledAsync()
+        {
+            return Ok(await _travelServices.GetAllCanceledAsync());
         }
 
         [Authorize]
-
         [HttpPost]
         public async Task<IActionResult> CreateTravel([FromBody] TravelSaveRequest request)
         {

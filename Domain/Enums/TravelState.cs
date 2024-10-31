@@ -9,7 +9,7 @@ namespace Domain.Models
     public enum TravelState
     {
         EnProceso,
-        Completado
-        //Cancelado
+        Completado,
+        Cancelado
     }
 }

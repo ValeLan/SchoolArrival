@@ -22,7 +22,7 @@ namespace Application.Services
             var response = await _userRepositoryBase.ListAsync();
             var filteredResponse = response
                 .Where(e => e.Role == Domain.Enums.Role.Driver && e.IsActive)
-                .ToList();                                 //Devuelvo solamente los activos
+                .ToList();
             var responseMapped = filteredResponse
                 .Select(e => _userMapping.FromEntityToResponse(e))
                 .ToList();
@@ -70,8 +70,7 @@ namespace Application.Services
         public async Task DeleteAsync(int idUser)
         {
             var response = await _userRepositoryBase.GetByIdAsync(idUser);
-            response.IsActive = false;
-            await _userRepositoryBase.UpdateAsync(response);
+            await _userRepositoryBase.DeleteAsync(response);
         }
     }
 }

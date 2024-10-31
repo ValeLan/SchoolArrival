@@ -8,6 +8,7 @@ using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data;
 using Microsoft.AspNetCore.Http.HttpResults;
+using System.Security.Claims;
 
 namespace Application.Services
 {
@@ -17,12 +18,14 @@ namespace Application.Services
         private readonly IRepositoryBase<Travel> _travelRepositoryBase;
         private readonly ITravelRepository _travelRepository;
         private readonly PassengerMapping _userMapping;
-        public UserServices(IRepositoryBase<User> userRepositoryBase, PassengerMapping userMapping, IRepositoryBase<Travel> travelRepositoryBase, ITravelRepository travelRepository)
+        private readonly TravelMapping _travelMapping;
+        public UserServices(IRepositoryBase<User> userRepositoryBase, PassengerMapping userMapping, IRepositoryBase<Travel> travelRepositoryBase, ITravelRepository travelRepository, TravelMapping travelMapping)
         {
             _userRepositoryBase = userRepositoryBase;
             _userMapping = userMapping;
             _travelRepositoryBase = travelRepositoryBase;
             _travelRepository = travelRepository;
+            _travelMapping = travelMapping;
         }
 
         public async Task<List<PassengerDto?>> GetAllPassengersAsync()
@@ -49,8 +52,17 @@ namespace Application.Services
             {
                 return null;
             }
-
-
+        }
+        public async Task<TravelDto?> GetMyTravelAsync(int idClaim)
+        {
+            var response = await _travelRepository.GetAll();
+            var filteredResponse = response
+                .FirstOrDefault(e => e.Passengers.Any(p => p.Id == idClaim));
+            if (filteredResponse == null)
+            {
+                return null;
+            }
+            return _travelMapping.FromEntityToResponse(filteredResponse);
         }
 
         public async Task<bool> CreateUser(PassengerRequest request)
@@ -78,8 +90,18 @@ namespace Application.Services
         public async Task DeleteAsync(int idUser)
         {
             var response = await _userRepositoryBase.GetByIdAsync(idUser);
+            await _userRepositoryBase.DeleteAsync(response);
+        }
+        public async Task<bool> BloquedAsync(int idUser)
+        {
+            var response = await _userRepositoryBase.GetByIdAsync(idUser);
+            if(response == null)
+            {
+                return false;   
+            }
             response.IsActive = false;
             await _userRepositoryBase.UpdateAsync(response);
+            return true;
         }
 
         public async Task SignToTravel(int idUser, int idTravel)

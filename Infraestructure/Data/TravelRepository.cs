@@ -2,6 +2,7 @@
 using SchoolArrival.Infrastructure.Data;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Domain.Enums;
 
 namespace Infraestructure.Data
 {
@@ -15,6 +16,7 @@ namespace Infraestructure.Data
                 .Include(e => e.School)
                 .Include(e => e.Passengers)
                 .Include(e => e.Driver)
+                .Where(t => t.Driver.Role == Role.Driver)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
@@ -24,6 +26,7 @@ namespace Infraestructure.Data
                 .Include(e => e.School)
                 .Include(e => e.Passengers)
                 .Include (e => e.Driver)
+                .Where(t => t.Driver.Role == Role.Driver)
                 .ToListAsync();
         }
     }

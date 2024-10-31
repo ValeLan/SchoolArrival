@@ -76,19 +76,17 @@ namespace SchoolArrival.Controllers
         public async Task<IActionResult> DeleteUser(int idUser)
         {
             var response = await _userServices.GetAdminAsync(idUser);
-
+            if(response == null)
+            {
+                return NotFound("No se encontró el usuario que desea eliminar.");
+            }
             try
             {
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-                if (userIdClaim == null || response.Id != int.Parse(userIdClaim))
+                if (userIdClaim == null || idUser != int.Parse(userIdClaim))
                 {
                     return StatusCode(403, "El usuario no está autorizado para eliminar este usuario.");
-                }
-
-                if (response == null)
-                {
-                    return NotFound("No se encontro el usuario que desea eliminar.");
                 }
                 await _userServices.DeleteAsync(response.Id);
 

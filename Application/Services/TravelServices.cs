@@ -6,6 +6,7 @@ using SchoolArrival.Domain.Interfaces;
 using Domain.Entities;
 using Domain.Enums;
 using System.Diagnostics;
+using Domain.Models;
 
 namespace Application.Services
 {
@@ -25,21 +26,33 @@ namespace Application.Services
             _driverRepository = userRepositoryBase;
             _schoolRepositoryBase = schoolRepositoryBase;
         }
+        public async Task<List<TravelDto?>> GetHistoricalAsync()
+        {
+            var response = await _travelRepository.GetAll();
+            if (response == null)
+            {
+                return null;
+            }
+            var responseMapped = response.Select(e => _travelMapping.FromEntityToResponse(e)).ToList();
 
-        public async Task<List<TravelDto?>> GetAllAsync()
+            return responseMapped;
+        }
+
+        public async Task<List<TravelDto?>> GetAllPendingAsync()
         {
             var response = await _travelRepository.GetAll();
             if (response == null) 
             {
                 return null;
             }
-            var responseMapped = response.Select(e => _travelMapping.FromEntityToResponse(e)).ToList();
+            var responsePending = response.Where(e => e.State == TravelState.EnProceso);
+            var responseMapped = responsePending.Select(e => _travelMapping.FromEntityToResponse(e)).ToList();
             
             return responseMapped;
         }
         public async Task<TravelDto?> GetAsync(int idTravel)
         {
-            var response = await GetAllAsync();
+            var response = await GetHistoricalAsync();
             if (response == null)
             {
                 return null;
@@ -48,7 +61,30 @@ namespace Application.Services
             return newResponse;
 
         }
+        public async Task<List<TravelDto?>> GetAllCompletedAsync()
+        {
+            var response = await _travelRepository.GetAll();
+            if (response == null)
+            {
+                return null;
+            }
+            var responsePending = response.Where(e => e.State == TravelState.Completado);
+            var responseMapped = responsePending.Select(e => _travelMapping.FromEntityToResponse(e)).ToList();
 
+            return responseMapped;
+        }
+        public async Task<List<TravelDto?>> GetAllCanceledAsync()
+        {
+            var response = await _travelRepository.GetAll();
+            if (response == null)
+            {
+                return null;
+            }
+            var responsePending = response.Where(e => e.State == TravelState.Cancelado);
+            var responseMapped = responsePending.Select(e => _travelMapping.FromEntityToResponse(e)).ToList();
+
+            return responseMapped;
+        }
         public async Task<bool> CreateAsync(TravelSaveRequest travel)
         {
             var driver = _driverRepository.GetAll();
@@ -106,7 +142,8 @@ namespace Application.Services
             {
                 return false;
             }
-            await _travelRepositoryBase.DeleteAsync(response);
+            response.State = TravelState.Cancelado;
+            await _travelRepositoryBase.UpdateAsync(response);
             return true;
         }
 
