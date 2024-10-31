@@ -42,7 +42,7 @@ namespace SchoolArrival.Controllers
         public async Task<IActionResult> GetMyTravelAsync()
         {
             var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-            if (userRoleClaim == Role.Driver.ToString())
+            if (userRoleClaim != Role.Passenger.ToString())
             {
                 return StatusCode(403, "El usuario no esta autorizado ver esta información.");
             }

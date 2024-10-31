@@ -38,6 +38,24 @@ namespace SchoolArrival.Controllers
         }
 
         [Authorize]
+        [HttpGet("MyTravels")]
+        public async Task<IActionResult> GetMyTravelsAsync()
+        {
+            var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            if (userRoleClaim != Role.Driver.ToString())
+            {
+                return StatusCode(403, "El usuario no esta autorizado ver esta información.");
+            }
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var response = await _userServices.GetMyTravelsAsync(int.Parse(userIdClaim));
+            if (response == null)
+            {
+                return StatusCode(404, "El usuario no tiene viajes asociados.");
+            }
+            return Ok(response);
+        }
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateUser(DriverRequest request)
         {

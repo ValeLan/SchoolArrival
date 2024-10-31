@@ -11,11 +11,16 @@ namespace Application.Services
     {
         private readonly IRepositoryBase<User> _userRepositoryBase;
         private readonly DriverMapping _userMapping;
-        public DriverServices(IRepositoryBase<User> userRepositoryBase, DriverMapping userMapping)
+        private readonly ITravelRepository _travelRepository;
+        private readonly TravelMapping _travelMapping;
+        public DriverServices(IRepositoryBase<User> userRepositoryBase, TravelMapping travelMapping, DriverMapping userMapping, ITravelRepository travelRepository)
         {
             _userRepositoryBase = userRepositoryBase;
             _userMapping = userMapping;
-        }
+            _travelRepository = travelRepository;
+            _travelMapping = travelMapping;
+        
+        }   
 
         public async Task<List<DriverDto?>> GetAllDriversAsync()
         {
@@ -26,6 +31,18 @@ namespace Application.Services
             var responseMapped = filteredResponse
                 .Select(e => _userMapping.FromEntityToResponse(e))
                 .ToList();
+            return responseMapped;
+        }
+
+        public async Task<List<TravelDto?>> GetMyTravelsAsync(int idClaim)
+        {
+            var response = await _travelRepository.GetAll();
+            var filteredResponse = response.Where(e => e.DriverId == idClaim).ToList();
+            if (filteredResponse == null)
+            {
+                return null;
+            }
+            var responseMapped = filteredResponse.Select(e => _travelMapping.FromEntityToResponse(e)).ToList();
             return responseMapped;
         }
 

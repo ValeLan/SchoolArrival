@@ -15,5 +15,6 @@ namespace Application.Interfaces
         Task<DriverDto> GetDriverAsync(int idUser);
         Task DeleteAsync(int idUser);
         Task<bool> UpdateUserAsync(int idUser, DriverRequest request);
+        Task<List<TravelDto?>> GetMyTravelsAsync(int idClaim);
     }
 }
