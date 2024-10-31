@@ -100,7 +100,6 @@ namespace Application.Services
             return false;
         }
 
-
         public async Task<bool> UpdateTravelAsync(int idTravel, TravelSaveRequest request)
         {
             var entity = await _travelRepositoryBase.GetByIdAsync(idTravel);

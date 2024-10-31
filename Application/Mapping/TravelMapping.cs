@@ -15,6 +15,27 @@ namespace Application.Mapping
             travel.DriverId = dto.DriverId;
             travel.Capacity = dto.Capacity;
             travel.State = TravelState.EnProceso;
+            if (dto.District == 0 )
+            {
+                travel.District = District.Norte;
+            } 
+            else if (dto.District == 1)
+            {
+                travel.District = District.Sur;
+            }
+            else if (dto.District == 2)
+            {
+                travel.District = District.Este;
+            }
+            else if (dto.District== 3)
+            {
+                travel.District = District.Oeste;
+            }
+            else
+            {
+
+                throw new Exception("No se ha ingresado un distrito valido, por favor complete el campo");
+            }
 
             return travel;
         }

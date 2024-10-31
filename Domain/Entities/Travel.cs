@@ -17,6 +17,7 @@ namespace Domain.Entities
         public School? School { get; set; }       
         public User? Driver { get; set; }
         public List<User> Passengers { get; set; } = new List<User>();
+        public District District { get; set; }
 
     }
 }

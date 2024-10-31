@@ -111,6 +111,10 @@ namespace Application.Services
             {
                 throw new Exception("El viaje no fue encontrado.");
             }
+            if (travel.State != Domain.Models.TravelState.EnProceso)
+            {
+                throw new Exception("Este viaje ya ha finalizado");
+            }
             var user = await _userRepositoryBase.GetByIdAsync(idUser);
             if (user == null)
             {

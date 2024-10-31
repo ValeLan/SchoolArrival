@@ -1,4 +1,6 @@
-﻿namespace Application.Models.Dtos
+﻿using Domain.Models;
+
+namespace Application.Models.Dtos
 {
     public class TravelDto
     {
@@ -9,5 +11,6 @@
         public SchoolDto? School { get; set; }
         public DriverDto? Driver { get; set; }
         public List<PassengerDto> Passengers { get; set; } = new List<PassengerDto>();
+        public District? District { get; set; }
     }
 }

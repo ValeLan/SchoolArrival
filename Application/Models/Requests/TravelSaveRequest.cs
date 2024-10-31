@@ -1,4 +1,6 @@
-﻿namespace Application.Models.Requests
+﻿using Domain.Models;
+
+namespace Application.Models.Requests
 {
     public class TravelSaveRequest
     {
@@ -6,5 +8,7 @@
         public int SchoolId { get; set; }
         public int DriverId { get; set; }
         public int Capacity { get; set; }
+        public int? District { get; set; }
+
     }
 }
