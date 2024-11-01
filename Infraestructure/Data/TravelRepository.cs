@@ -26,7 +26,7 @@ namespace Infraestructure.Data
                 .Include(e => e.School)
                 .Include(e => e.Passengers)
                 .Include (e => e.Driver)
-                .Where(t => t.Driver.Role == Role.Driver)
+                //.Where(t => t.Driver.Role == Role.Driver)
                 .ToListAsync();
         }
     }

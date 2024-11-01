@@ -3,6 +3,7 @@ using Application.Mapping;
 using Application.Models.Dtos;
 using Application.Models.Requests;
 using Domain.Entities;
+using Domain.Models;
 using SchoolArrival.Domain.Interfaces;
 
 namespace Application.Services
@@ -10,15 +11,17 @@ namespace Application.Services
     public class DriverServices : IDriverServices
     {
         private readonly IRepositoryBase<User> _userRepositoryBase;
+        private readonly IRepositoryBase<Travel> _travelRepositoryBase;
         private readonly DriverMapping _userMapping;
         private readonly ITravelRepository _travelRepository;
         private readonly TravelMapping _travelMapping;
-        public DriverServices(IRepositoryBase<User> userRepositoryBase, TravelMapping travelMapping, DriverMapping userMapping, ITravelRepository travelRepository)
+        public DriverServices(IRepositoryBase<User> userRepositoryBase, TravelMapping travelMapping, DriverMapping userMapping, ITravelRepository travelRepository, IRepositoryBase<Travel> travelRepositoryBase)
         {
             _userRepositoryBase = userRepositoryBase;
             _userMapping = userMapping;
             _travelRepository = travelRepository;
             _travelMapping = travelMapping;
+            _travelRepositoryBase = travelRepositoryBase;
         
         }   
 
@@ -34,10 +37,10 @@ namespace Application.Services
             return responseMapped;
         }
 
-        public async Task<List<TravelDto?>> GetMyTravelsAsync(int idClaim)
+        public async Task<List<TravelDto?>> GetMyTravelsAsync(int idDriver)
         {
             var response = await _travelRepository.GetAll();
-            var filteredResponse = response.Where(e => e.DriverId == idClaim).ToList();
+            var filteredResponse = response.Where(e => e.DriverId == idDriver).ToList();
             if (filteredResponse == null)
             {
                 return null;
@@ -86,8 +89,17 @@ namespace Application.Services
 
         public async Task DeleteAsync(int idUser)
         {
+            var myTravels = await _travelRepository.GetAll();
+            var filteredResponse = myTravels.Where(e => e.DriverId == idUser).ToList();
+            foreach (var travel in filteredResponse)
+            {
+                travel.State = TravelState.Demorado;
+                travel.DriverId = null; 
+            }
+            await _travelRepositoryBase.SaveChangesAsync();
             var response = await _userRepositoryBase.GetByIdAsync(idUser);
             await _userRepositoryBase.DeleteAsync(response);
+            
         }
     }
 }

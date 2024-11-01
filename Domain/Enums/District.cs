@@ -11,9 +11,9 @@ namespace Domain.Models
 {
     public enum District
     {
-        Norte,
-        Sur,
-        Este,
-        Oeste
+        Norte = 0,
+        Sur = 1,
+        Este = 2,
+        Oeste = 3
     }
 }

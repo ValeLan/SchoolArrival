@@ -38,16 +38,15 @@ namespace SchoolArrival.Controllers
         }
 
         [Authorize]
-        [HttpGet("MyTravels")]
-        public async Task<IActionResult> GetMyTravelsAsync()
+        [HttpGet("MyTravels/id/{idDriver}")]
+        public async Task<IActionResult> GetMyTravelsAsync(int idDriver)
         {
             var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-            if (userRoleClaim != Role.Driver.ToString())
+            if (userRoleClaim == Role.Passenger.ToString())
             {
                 return StatusCode(403, "El usuario no esta autorizado ver esta información.");
             }
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var response = await _userServices.GetMyTravelsAsync(int.Parse(userIdClaim));
+            var response = await _userServices.GetMyTravelsAsync(idDriver);
             if (response == null)
             {
                 return StatusCode(404, "El usuario no tiene viajes asociados.");

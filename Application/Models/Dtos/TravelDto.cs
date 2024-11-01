@@ -11,6 +11,6 @@ namespace Application.Models.Dtos
         public SchoolDto? School { get; set; }
         public DriverDto? Driver { get; set; }
         public List<PassengerDto> Passengers { get; set; } = new List<PassengerDto>();
-        public District? District { get; set; }
+        public string? District { get; set; }
     }
 }

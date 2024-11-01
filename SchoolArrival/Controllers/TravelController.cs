@@ -35,6 +35,11 @@ namespace SchoolArrival.Controllers
         {
             return Ok(await _travelServices.GetAllCompletedAsync());
         }
+        [HttpGet("Delay")]
+        public async Task<IActionResult> GetAllDelayAsync()
+        {
+            return Ok(await _travelServices.GetAllDelayAsync());
+        }
 
         [HttpGet("Canceled")]
         public async Task<IActionResult> GetAllCanceledAsync()
@@ -68,6 +73,37 @@ namespace SchoolArrival.Controllers
             {
                 return Forbid(ex.Message);
             }
+            
+        }
+
+        [Authorize]
+        [HttpPut("IdTraver/{idTravel}/IdDriver/{idDriver}")]
+        public async Task<IActionResult> ReplaceDriver(int idTravel, int idDriver)
+        {
+            var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            if (userRoleClaim == Role.Passenger.ToString())
+            {
+                return StatusCode(403, "El pasajero no esta autorizado para modificar viajes.");
+            }
+
+            try
+            {
+                var response = await _travelServices.ReplaceDriverAsync(idTravel, idDriver);
+                if (response)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound("No se encontro el viaje seleccionado.");
+                }
+                
+            }
+            catch (Exception ex) 
+            { 
+                return BadRequest(ex.Message);
+            }
+            
             
         }
         [Authorize]

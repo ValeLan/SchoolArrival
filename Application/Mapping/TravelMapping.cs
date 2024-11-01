@@ -53,7 +53,8 @@ namespace Application.Mapping
                 State = travel.State.ToString(),
                 School = travel.School != null ? _schoolMapping.FromEntityToResponse(travel.School) : null,
                 Driver = travel.Driver != null ? _driverMapping.FromEntityToResponse(travel.Driver) : null,
-                Passengers = travel.Passengers != null ? travel.Passengers.Select(p => _userMapping.FromEntityToResponse(p)).ToList() : new List<PassengerDto>()
+                Passengers = travel.Passengers != null ? travel.Passengers.Select(p => _userMapping.FromEntityToResponse(p)).ToList() : new List<PassengerDto>(),
+                District = travel.District.ToString(),
             };
             return dto;
         }

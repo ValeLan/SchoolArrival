@@ -10,6 +10,7 @@ namespace Domain.Models
     {
         EnProceso,
         Completado,
+        Demorado,
         Cancelado
     }
 }

@@ -4,8 +4,6 @@ using Application.Models.Dtos;
 using Application.Models.Requests;
 using SchoolArrival.Domain.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
-using System.Diagnostics;
 using Domain.Models;
 
 namespace Application.Services
@@ -73,6 +71,20 @@ namespace Application.Services
 
             return responseMapped;
         }
+
+        public async Task<List<TravelDto?>> GetAllDelayAsync()
+        {
+            var response = await _travelRepository.GetAll();
+            if (response == null)
+            {
+                return null;
+            }
+            var responsePending = response.Where(e => e.State == TravelState.Demorado);
+            var responseMapped = responsePending.Select(e => _travelMapping.FromEntityToResponse(e)).ToList();
+
+            return responseMapped;
+        }
+
         public async Task<List<TravelDto?>> GetAllCanceledAsync()
         {
             var response = await _travelRepository.GetAll();
@@ -134,6 +146,18 @@ namespace Application.Services
             return true;
         }
 
+        public async Task<bool> ReplaceDriverAsync(int idTravel, int idNewDriver)
+        {
+            var response = await _travelRepositoryBase.GetByIdAsync(idTravel);
+            if (response == null)
+            {
+                return false;
+            }
+            response.DriverId = idNewDriver;
+            response.State = TravelState.EnProceso;
+            await _travelRepositoryBase.SaveChangesAsync();
+            return true;
+        }
         public async Task<bool> DeleteAsync(int idTravel)
         {
             var response = await _travelRepositoryBase.GetByIdAsync(idTravel);

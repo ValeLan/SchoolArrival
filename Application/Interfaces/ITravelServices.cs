@@ -9,7 +9,9 @@ namespace Application.Interfaces
         Task<List<TravelDto>> GetAllPendingAsync();
         Task<TravelDto> GetAsync(int idTravel);
         Task<List<TravelDto?>> GetAllCompletedAsync();
+        Task<List<TravelDto?>> GetAllDelayAsync();
         Task<List<TravelDto?>> GetAllCanceledAsync();
+        Task<bool> ReplaceDriverAsync(int idTravel, int idNewDriver);
         Task<bool> CreateAsync(TravelSaveRequest travel);
         Task<bool> UpdateTravelAsync(int idTravel, TravelSaveRequest request);
 
