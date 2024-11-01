@@ -13,6 +13,7 @@ namespace Application.Interfaces
         Task DeleteAsync(int idUser);
         Task<bool> UpdateUserAsync(int idUser, PassengerRequest request);
         Task<bool> BloquedAsync(int idUser);
+        Task<bool> UnBlockedAsync(int idUser);
         Task SignToTravel(int idUser, int idTravel);
         Task DropTravel(int idUser, int idTravel);
 

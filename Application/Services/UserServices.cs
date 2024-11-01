@@ -104,6 +104,18 @@ namespace Application.Services
             return true;
         }
 
+        public async Task<bool> UnBlockedAsync(int idUser)
+        {
+            var response = await _userRepositoryBase.GetByIdAsync(idUser);
+            if (response == null)
+            {
+                return false;
+            }
+            response.IsActive = true;
+            await _userRepositoryBase.UpdateAsync(response);
+            return true;
+        }
+
         public async Task SignToTravel(int idUser, int idTravel)
         {
             var travel = await _travelRepository.GetById(idTravel);
@@ -127,6 +139,10 @@ namespace Application.Services
             if (travel.Passengers.Contains(user))
             {
                 throw new Exception("El pasajero ya se encuentra registrado en el viaje.");
+            }
+            if(user.IsActive == false)
+            {
+                throw new Exception("El pasajero no puede inscribirse a viajes.");
             }
             travel.Capacity = travel.Capacity -1;
             travel.Passengers.Add(user);

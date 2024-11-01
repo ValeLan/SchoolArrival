@@ -113,6 +113,31 @@ namespace SchoolArrival.Controllers
         }
 
         [Authorize]
+        [HttpPut("UnBlocked/id/{idUser}")]
+        public async Task<IActionResult> UnBlockedAsync([FromRoute] int idUser)
+        {
+            try
+            {
+                var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                if (userRoleClaim != Role.Admin.ToString())
+                {
+                    return StatusCode(403, "El usuario no esta autorizado para bloquear a un pasajero.");
+                }
+
+                bool response = await _userServices.UnBlockedAsync(idUser);
+                if (response == false)
+                {
+                    return NotFound("No se encontro el usuario.");
+                }
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeleteUser(int idUser)
         {
