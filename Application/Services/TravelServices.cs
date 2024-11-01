@@ -11,18 +11,20 @@ namespace Application.Services
     public class TravelServices : ITravelServices
     {
         private readonly IRepositoryBase<Travel> _travelRepositoryBase;
+        private readonly IRepositoryBase<User> _userRepositoryBase;
         private readonly IRepositoryBase<School> _schoolRepositoryBase;
         private readonly IDriverRepository _driverRepository;
         private readonly ITravelRepository _travelRepository;
         private readonly TravelMapping _travelMapping;
 
-        public TravelServices(IRepositoryBase<Travel> travelRepositoryBase, TravelMapping TravelMapping, ITravelRepository travelRepository, IDriverRepository userRepositoryBase, IRepositoryBase<School> schoolRepositoryBase)
+        public TravelServices(IRepositoryBase<Travel> travelRepositoryBase, TravelMapping TravelMapping, ITravelRepository travelRepository, IDriverRepository userRepository, IRepositoryBase<School> schoolRepositoryBase, IRepositoryBase<User> userRepositoryBase)
         {
             _travelMapping = TravelMapping;
             _travelRepositoryBase = travelRepositoryBase;
             _travelRepository = travelRepository;
-            _driverRepository = userRepositoryBase;
+            _driverRepository = userRepository;
             _schoolRepositoryBase = schoolRepositoryBase;
+            _userRepositoryBase = userRepositoryBase;
         }
         public async Task<List<TravelDto?>> GetHistoricalAsync()
         {
@@ -151,6 +153,11 @@ namespace Application.Services
             var response = await _travelRepositoryBase.GetByIdAsync(idTravel);
             if (response == null)
             {
+                return false;
+            }
+            var driver = await _userRepositoryBase.GetByIdAsync(idNewDriver);
+            if(driver == null)
+            { 
                 return false;
             }
             response.DriverId = idNewDriver;

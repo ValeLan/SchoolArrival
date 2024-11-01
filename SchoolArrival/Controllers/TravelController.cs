@@ -77,7 +77,7 @@ namespace SchoolArrival.Controllers
         }
 
         [Authorize]
-        [HttpPut("IdTraver/{idTravel}/IdDriver/{idDriver}")]
+        [HttpPut("IdTravel/{idTravel}/IdDriver/{idDriver}")]
         public async Task<IActionResult> ReplaceDriver(int idTravel, int idDriver)
         {
             var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
@@ -95,7 +95,7 @@ namespace SchoolArrival.Controllers
                 }
                 else
                 {
-                    return NotFound("No se encontro el viaje seleccionado.");
+                    return NotFound("Uno de los valores ingresados no existe.");
                 }
                 
             }
