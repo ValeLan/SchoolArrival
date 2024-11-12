@@ -138,7 +138,7 @@ namespace SchoolArrival.Controllers
         }
 
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("{idUser}")]
         public async Task<IActionResult> DeleteUser(int idUser)
         {
             var response = await _userServices.GetPassengerAsync(idUser);

@@ -18,7 +18,7 @@ namespace SchoolArrival.Controllers
             _userService = userService;
         }
 
-        [HttpPost("SignToTravel")]
+        [HttpPost("SignToTravel/{idTravel}")]
         public async Task<IActionResult> SignToTravel(int idTravel)
         {
             var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
@@ -38,7 +38,7 @@ namespace SchoolArrival.Controllers
             }
         }
 
-        [HttpPost("DropTravel")]
+        [HttpPost("DropTravel/{idTravel}")]
         public async Task<IActionResult> DropTravel(int idTravel)
         {
             var userRoleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;

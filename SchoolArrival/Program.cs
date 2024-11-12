@@ -56,6 +56,13 @@ builder.Services.AddAuthentication("Bearer")
     }
 );
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontendOrigin",
+        policy => policy.WithOrigins("http://localhost:5173") // Cambia esta URL según la del frontend
+                         .AllowAnyMethod()
+                         .AllowAnyHeader());
+});
 
 builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<ITravelRepository, TravelRepository>();
@@ -89,7 +96,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
 app.UseHttpsRedirection();
+
+app.UseCors("AllowFrontendOrigin");
 
 app.UseAuthorization();
 
